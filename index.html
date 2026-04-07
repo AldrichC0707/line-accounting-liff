@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>編輯記帳</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #1DB446;
+      --green-light: #e8f8ed;
+      --red: #FF5555;
+      --red-light: #fff0f0;
+      --gray: #f5f5f5;
+      --gray2: #e0e0e0;
+      --text: #222;
+      --text2: #888;
+      --radius: 14px;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      padding-bottom: 100px;
+    }
+
+    /* Header */
+    .header {
+      background: white;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--gray2);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .header-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .header-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--gray);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--text2);
+    }
+
+    /* Type Toggle */
+    .type-section {
+      background: white;
+      margin: 12px 16px;
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .type-label {
+      font-size: 15px;
+      color: var(--text2);
+    }
+    .type-toggle {
+      display: flex;
+      background: var(--gray);
+      border-radius: 10px;
+      padding: 3px;
+      gap: 3px;
+    }
+    .type-btn {
+      padding: 7px 20px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Noto Sans TC', sans-serif;
+      transition: all 0.2s;
+      color: var(--text2);
+      background: transparent;
+    }
+    .type-btn.active-expense {
+      background: var(--red);
+      color: white;
+    }
+    .type-btn.active-income {
+      background: var(--green);
+      color: white;
+    }
+
+    /* Card */
+    .card {
+      background: white;
+      margin: 8px 16px;
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    /* Field */
+    .field {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--gray);
+      cursor: pointer;
+      min-height: 52px;
+    }
+    .field:last-child { border-bottom: none; }
+    .field-label {
+      font-size: 15px;
+      color: var(--text2);
+      flex-shrink: 0;
+      min-width: 60px;
+    }
+    .field-value {
+      font-size: 15px;
+      color: var(--text);
+      text-align: right;
+      flex: 1;
+    }
+    .field-value.placeholder { color: var(--text2); }
+    .field-arrow {
+      color: var(--text2);
+      margin-left: 8px;
+      font-size: 12px;
+    }
+
+    /* Amount */
+    .amount-section {
+      background: white;
+      margin: 8px 16px;
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .amount-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .amount-label { font-size: 15px; color: var(--text2); }
+    .amount-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .amount-sign {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--red);
+    }
+    .amount-sign.income { color: var(--green); }
+    .amount-input {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      border: none;
+      outline: none;
+      text-align: right;
+      width: 160px;
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .amount-currency {
+      font-size: 14px;
+      color: var(--text2);
+    }
+
+    /* Category Grid */
+    .category-panel {
+      display: none;
+      padding: 12px 16px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .category-panel.open { display: flex; }
+    .cat-btn {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1.5px solid var(--gray2);
+      background: white;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: 'Noto Sans TC', sans-serif;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .cat-btn.selected {
+      border-color: var(--green);
+      background: var(--green-light);
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    /* Note */
+    .note-section {
+      background: white;
+      margin: 8px 16px;
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .note-label { font-size: 15px; color: var(--text2); margin-bottom: 10px; }
+    .note-input {
+      width: 100%;
+      border: 1.5px solid var(--gray2);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 15px;
+      font-family: 'Noto Sans TC', sans-serif;
+      outline: none;
+      resize: none;
+      color: var(--text);
+      transition: border-color 0.2s;
+    }
+    .note-input:focus { border-color: var(--green); }
+
+    /* Bottom Buttons */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 16px;
+      background: white;
+      border-top: 1px solid var(--gray2);
+      display: flex;
+      gap: 10px;
+    }
+    .btn-delete {
+      flex: 1;
+      padding: 14px;
+      border-radius: var(--radius);
+      border: none;
+      background: var(--red-light);
+      color: var(--red);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Noto Sans TC', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-save {
+      flex: 2;
+      padding: 14px;
+      border-radius: var(--radius);
+      border: none;
+      background: var(--green);
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .btn-save:active { opacity: 0.85; }
+
+    /* Loading */
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      gap: 16px;
+      color: var(--text2);
+    }
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--gray2);
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Select Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 100;
+      align-items: flex-end;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white;
+      width: 100%;
+      border-radius: 20px 20px 0 0;
+      padding: 20px 16px 40px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .modal-item {
+      padding: 14px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 15px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-item:hover { background: var(--gray); }
+    .modal-item.selected { color: var(--green); font-weight: 600; }
+    .modal-item.selected::after { content: '✓'; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-80px);
+      background: #333;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      z-index: 200;
+      transition: transform 0.3s;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+<div id="loading" class="loading">
+  <div class="spinner"></div>
+  <div>載入中...</div>
+</div>
+
+<div id="app" style="display:none">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-title">編輯記帳</div>
+    <button class="header-close" onclick="closeLiff()">✕</button>
+  </div>
+
+  <!-- Type Toggle -->
+  <div class="type-section">
+    <span class="type-label">屬性</span>
+    <div class="type-toggle">
+      <button class="type-btn" id="btn-expense" onclick="setType('expense')">支出</button>
+      <button class="type-btn" id="btn-income" onclick="setType('income')">收入</button>
+    </div>
+  </div>
+
+  <!-- Amount -->
+  <div class="amount-section">
+    <div class="amount-row">
+      <span class="amount-label">金額</span>
+      <div class="amount-input-wrap">
+        <span class="amount-sign" id="amount-sign">-</span>
+        <input type="number" class="amount-input" id="amount-input" placeholder="0">
+        <span class="amount-currency">NT$</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category -->
+  <div class="card">
+    <div class="field" onclick="toggleCategory()">
+      <span class="field-label">類型</span>
+      <span class="field-value" id="category-display">請選擇類別</span>
+      <span class="field-arrow" id="category-arrow">▼</span>
+    </div>
+    <div class="category-panel" id="category-panel"></div>
+  </div>
+
+  <!-- Asset & Date -->
+  <div class="card">
+    <div class="field" onclick="openModal('asset')">
+      <span class="field-label">帳戶</span>
+      <span class="field-value" id="asset-display">請選擇帳戶</span>
+      <span class="field-arrow">›</span>
+    </div>
+    <div class="field">
+      <span class="field-label">日期</span>
+      <input type="date" id="date-input" style="border:none;outline:none;font-size:15px;font-family:'Noto Sans TC',sans-serif;color:#222;text-align:right;cursor:pointer">
+    </div>
+  </div>
+
+  <!-- Note -->
+  <div class="note-section">
+    <div class="note-label">備註</div>
+    <textarea class="note-input" id="note-input" rows="2" placeholder="輸入備註..."></textarea>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="bottom-bar">
+    <button class="btn-delete" onclick="confirmDelete()">🗑 刪除</button>
+    <button class="btn-save" onclick="saveRecord()">儲存</button>
+  </div>
+</div>
+
+<!-- Asset Modal -->
+<div class="modal-overlay" id="asset-modal" onclick="closeModal('asset')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title">選擇帳戶</div>
+    <div id="asset-list"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ============================
+  // 設定區（請修改這裡）
+  // ============================
+  const LIFF_ID = 'YOUR_LIFF_ID';
+  const N8N_WEBHOOK_GET = 'https://YOUR_N8N_URL/webhook/liff-get-tx';
+  const N8N_WEBHOOK_UPDATE = 'https://YOUR_N8N_URL/webhook/liff-update-tx';
+  const N8N_WEBHOOK_DELETE = 'https://YOUR_N8N_URL/webhook/liff-delete-tx';
+  // ============================
+
+  const CATEGORIES_EXPENSE = ['伙食費','交通費','居家','娛樂','購物','醫藥','生活','其他'];
+  const CATEGORIES_INCOME = ['薪資','獎金','投資收益','其他'];
+
+  let txId = null;
+  let txData = null;
+  let assets = [];
+  let selectedAssetId = null;
+  let selectedCategory = null;
+  let currentType = 'expense';
+
+  async function init() {
+    await liff.init({ liffId: LIFF_ID });
+
+    // 從 URL 取得 tx_id
+    const params = new URLSearchParams(location.search);
+    txId = params.get('tx_id');
+
+    if (!txId) {
+      showToast('找不到記帳資料');
+      return;
+    }
+
+    // 取得記帳資料
+    const token = liff.getAccessToken();
+    const res = await fetch(N8N_WEBHOOK_GET, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tx_id: txId, token })
+    });
+    const data = await res.json();
+    txData = data.transaction;
+    assets = data.assets || [];
+
+    renderForm();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+  }
+
+  function renderForm() {
+    // Type
+    currentType = txData.type === 'income' ? 'income' : 'expense';
+    setType(currentType);
+
+    // Amount
+    document.getElementById('amount-input').value = txData.amount;
+
+    // Category
+    selectedCategory = txData.category;
+    document.getElementById('category-display').textContent = selectedCategory || '請選擇類別';
+    renderCategoryPanel();
+
+    // Asset
+    selectedAssetId = txData.asset_id;
+    const asset = assets.find(a => a.id === selectedAssetId);
+    document.getElementById('asset-display').textContent = asset?.name || '請選擇帳戶';
+
+    // Date
+    document.getElementById('date-input').value = txData.transaction_date;
+
+    // Note
+    document.getElementById('note-input').value = txData.item || '';
+  }
+
+  function setType(type) {
+    currentType = type;
+    const expBtn = document.getElementById('btn-expense');
+    const incBtn = document.getElementById('btn-income');
+    const sign = document.getElementById('amount-sign');
+
+    expBtn.className = 'type-btn' + (type === 'expense' ? ' active-expense' : '');
+    incBtn.className = 'type-btn' + (type === 'income' ? ' active-income' : '');
+    sign.textContent = type === 'income' ? '+' : '-';
+    sign.className = 'amount-sign' + (type === 'income' ? ' income' : '');
+
+    renderCategoryPanel();
+  }
+
+  function renderCategoryPanel() {
+    const cats = currentType === 'income' ? CATEGORIES_INCOME : CATEGORIES_EXPENSE;
+    const panel = document.getElementById('category-panel');
+    panel.innerHTML = cats.map(c => `
+      <button class="cat-btn ${selectedCategory === c ? 'selected' : ''}" onclick="selectCategory('${c}')">${c}</button>
+    `).join('');
+  }
+
+  function toggleCategory() {
+    const panel = document.getElementById('category-panel');
+    const arrow = document.getElementById('category-arrow');
+    panel.classList.toggle('open');
+    arrow.textContent = panel.classList.contains('open') ? '▲' : '▼';
+  }
+
+  function selectCategory(cat) {
+    selectedCategory = cat;
+    document.getElementById('category-display').textContent = cat;
+    document.getElementById('category-display').classList.remove('placeholder');
+    renderCategoryPanel();
+  }
+
+  function openModal(type) {
+    if (type === 'asset') {
+      const list = document.getElementById('asset-list');
+      list.innerHTML = assets
+        .filter(a => a.type !== 'stock_account')
+        .map(a => `
+          <div class="modal-item ${selectedAssetId === a.id ? 'selected' : ''}" onclick="selectAsset('${a.id}', '${a.name}')">
+            ${a.name}
+          </div>
+        `).join('');
+      document.getElementById('asset-modal').classList.add('open');
+    }
+  }
+
+  function closeModal(type) {
+    document.getElementById(`${type}-modal`).classList.remove('open');
+  }
+
+  function selectAsset(id, name) {
+    selectedAssetId = id;
+    document.getElementById('asset-display').textContent = name;
+    document.getElementById('asset-display').classList.remove('placeholder');
+    closeModal('asset');
+  }
+
+  async function saveRecord() {
+    const amount = parseFloat(document.getElementById('amount-input').value);
+    const date = document.getElementById('date-input').value;
+    const note = document.getElementById('note-input').value;
+
+    if (!amount || amount <= 0) { showToast('請輸入金額'); return; }
+    if (!selectedCategory) { showToast('請選擇類別'); return; }
+    if (!date) { showToast('請選擇日期'); return; }
+
+    const token = liff.getAccessToken();
+    await fetch(N8N_WEBHOOK_UPDATE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tx_id: txId,
+        token,
+        amount,
+        category: selectedCategory,
+        asset_id: selectedAssetId,
+        transaction_date: date,
+        item: note,
+        type: currentType
+      })
+    });
+
+    showToast('儲存成功！');
+    setTimeout(() => liff.closeWindow(), 1200);
+  }
+
+  async function confirmDelete() {
+    if (!confirm('確定要刪除這筆記錄嗎？')) return;
+    const token = liff.getAccessToken();
+    await fetch(N8N_WEBHOOK_DELETE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tx_id: txId, token })
+    });
+    showToast('已刪除');
+    setTimeout(() => liff.closeWindow(), 1200);
+  }
+
+  function closeLiff() {
+    liff.closeWindow();
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+  }
+
+  init().catch(e => {
+    console.error(e);
+    document.getElementById('loading').innerHTML = '<div style="color:#888;padding:20px">載入失敗，請重試</div>';
+  });
+</script>
+</body>
+</html>
