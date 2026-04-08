@@ -197,7 +197,13 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ tx_id: txId, line_user_id: lineUserId })
     });
+    
     const data = await res.json();
+    if (data.error) {
+      document.getElementById('loading').innerHTML = `<div style="color:#888;padding:40px;text-align:center">${data.error}</div>`;
+      return;
+    }
+    
     txData = data.transaction;
     assets = data.assets || [];
 
