@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>資產總覽</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --cream:#FAF7F2;--paper:#F5F0E8;--paper2:#EDE8DF;
+      --warm:#8B6F47;--warm-light:#C4A882;--warm-dark:#5C4A2A;
+      --accent:#D4845A;
+      --green:#5A8A6A;--green-light:#D4E8DA;
+      --red:#B85450;
+      --blue:#5A7A8A;--blue-light:#D4E4E8;
+      --purple:#7A5A8A;--purple-light:#E4D4E8;
+      --text:#2C1F14;--text2:#7A6555;--text3:#B0A090;
+      --shadow:0 2px 12px rgba(139,111,71,0.12);
+      --radius:16px;
+    }
+    body{font-family:'Noto Sans TC',sans-serif;background:var(--cream);min-height:100vh;padding-bottom:40px;}
+    .header{background:var(--paper);border-bottom:1.5px solid var(--paper2);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;}
+    .header-title{font-size:17px;font-weight:700;font-family:'Noto Serif TC',serif;color:var(--warm-dark);}
+    .header-btn{width:36px;height:36px;border-radius:50%;background:white;border:1.5px solid var(--paper2);cursor:pointer;font-size:15px;color:var(--text2);box-shadow:var(--shadow);}
+
+    .total-card{margin:14px 16px;background:var(--warm-dark);border-radius:var(--radius);padding:22px;color:white;position:relative;overflow:hidden;box-shadow:0 4px 20px rgba(92,74,42,0.3);}
+    .total-card::before{content:'';position:absolute;top:-40px;right:-40px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,0.05);}
+    .total-card::after{content:'資產';position:absolute;right:16px;bottom:-10px;font-size:60px;font-family:'Noto Serif TC',serif;font-weight:900;color:rgba(255,255,255,0.06);pointer-events:none;}
+    .total-label{font-size:11px;opacity:0.6;margin-bottom:6px;font-family:'Noto Serif TC',serif;letter-spacing:0.5px;}
+    .total-amount{font-size:38px;font-weight:900;font-family:'Noto Serif TC',serif;letter-spacing:-2px;margin-bottom:4px;}
+    .total-time{font-size:11px;opacity:0.5;}
+
+    .mini-row{display:flex;gap:8px;margin:0 16px 14px;}
+    .mini-card{flex:1;background:white;border-radius:12px;border:1.5px solid var(--paper2);padding:12px;box-shadow:var(--shadow);text-align:center;}
+    .mini-label{font-size:10px;color:var(--text3);margin-bottom:6px;font-family:'Noto Serif TC',serif;}
+    .mini-value{font-size:14px;font-weight:700;font-family:'Noto Serif TC',serif;}
+
+    .section{margin:0 16px 12px;}
+    .section-title{font-size:12px;font-weight:700;color:var(--text3);padding:8px 4px 6px;font-family:'Noto Serif TC',serif;letter-spacing:0.5px;}
+
+    .asset-list{background:white;border-radius:var(--radius);border:1.5px solid var(--paper2);overflow:hidden;box-shadow:var(--shadow);}
+    .asset-item{display:flex;align-items:center;padding:14px 16px;border-bottom:1px dashed var(--paper2);gap:12px;}
+    .asset-item:last-child{border-bottom:none;}
+    .asset-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border:1.5px solid var(--paper2);}
+    .asset-info{flex:1;}
+    .asset-name{font-size:14px;font-weight:600;color:var(--text);}
+    .asset-type{font-size:11px;color:var(--text3);margin-top:2px;}
+    .asset-right{text-align:right;}
+    .asset-balance{font-size:15px;font-weight:700;font-family:'Noto Serif TC',serif;}
+    .asset-sub{font-size:11px;color:var(--text3);margin-top:2px;}
+
+    .stock-item{display:flex;align-items:center;padding:14px 16px;border-bottom:1px dashed var(--paper2);gap:12px;}
+    .stock-item:last-child{border-bottom:none;}
+    .stock-code{background:var(--warm-dark);color:white;border-radius:8px;padding:4px 8px;font-size:11px;font-weight:700;font-family:'Noto Serif TC',serif;flex-shrink:0;}
+    .stock-info{flex:1;}
+    .stock-name{font-size:14px;font-weight:600;color:var(--text);}
+    .stock-detail{font-size:11px;color:var(--text3);margin-top:2px;}
+    .stock-right{text-align:right;}
+    .stock-value{font-size:15px;font-weight:700;font-family:'Noto Serif TC',serif;color:var(--purple);}
+    .stock-profit{font-size:12px;font-weight:600;margin-top:2px;}
+    .stock-profit.up{color:var(--red);}
+    .stock-profit.down{color:var(--green);}
+
+    .empty-row{padding:16px;text-align:center;color:var(--text3);font-size:13px;font-family:'Noto Serif TC',serif;}
+    .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:16px;color:var(--text3);background:var(--cream);}
+    .spinner{width:32px;height:32px;border:2px solid var(--paper2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .dev-badge{position:fixed;top:8px;right:8px;background:var(--accent);color:white;font-size:11px;padding:3px 8px;border-radius:10px;z-index:999;}
+  </style>
+</head>
+<body>
+<div id="loading" class="loading"><div class="spinner"></div><div style="font-family:'Noto Serif TC',serif">載入中...</div></div>
+<div id="app" style="display:none">
+  <div class="header">
+    <div class="header-title">💼 資產總覽</div>
+    <button class="header-btn" onclick="closeLiff()">✕</button>
+  </div>
+
+  <div class="total-card">
+    <div class="total-label">淨資產（NT$）</div>
+    <div class="total-amount" id="total-amount">0</div>
+    <div class="total-time" id="total-time"></div>
+  </div>
+
+  <div class="mini-row">
+    <div class="mini-card"><div class="mini-label">現金與銀行</div><div class="mini-value" id="mini-bank" style="color:var(--blue)">0</div></div>
+    <div class="mini-card"><div class="mini-label">股票市值</div><div class="mini-value" id="mini-stock" style="color:var(--purple)">0</div></div>
+    <div class="mini-card"><div class="mini-label">信用卡負債</div><div class="mini-value" id="mini-credit" style="color:var(--red)">0</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">─ 現金與銀行帳戶</div>
+    <div class="asset-list" id="cash-bank-list"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">─ 信用卡</div>
+    <div class="asset-list" id="credit-list"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">─ 股票持倉</div>
+    <div class="asset-list" id="stock-list"></div>
+  </div>
+</div>
+
+<script>
+  const LIFF_ID='2009720131-1IsEQKIQ';
+  const N8N='https://aldrichc.zeabur.app/webhook/liff-get-assets';
+  let lineUserId=null,isDevMode=false;
+
+  async function init(){
+    try{
+      await liff.init({liffId:LIFF_ID});
+      if(!liff.isInClient()){isDevMode=true;document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>');}
+      else lineUserId=liff.getContext().userId;
+    }catch(e){isDevMode=true;document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>');}
+    await loadData();
+    document.getElementById('loading').style.display='none';
+    document.getElementById('app').style.display='block';
+  }
+
+  async function loadData(){
+    let assets=[],holdings=[];
+    if(isDevMode){
+      assets=[
+        {id:'1',name:'現金',type:'cash',balance:5000,used_amount:0,credit_limit:0},
+        {id:'2',name:'中信銀行',type:'bank',balance:250000,used_amount:0,credit_limit:0},
+        {id:'3',name:'中信卡',type:'credit',balance:0,used_amount:15000,credit_limit:100000},
+        {id:'4',name:'中信證券',type:'stock_account',balance:50000,used_amount:0,credit_limit:0},
+      ];
+      holdings=[
+        {stock_code:'2330',stock_name:'台積電',shares:100,avg_cost:950,current_price:980,market_value:98000,profit:3000,return_rate:3.16},
+        {stock_code:'6443',stock_name:'元晶',shares:3000,avg_cost:49,current_price:38.8,market_value:116400,profit:-30600,return_rate:-20.82},
+      ];
+    }else{
+      const res=await fetch(N8N,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_user_id:lineUserId})});
+      const d=await res.json();
+      assets=d.assets||[];holdings=d.holdings||[];
+    }
+    render(assets,holdings);
+  }
+
+  function render(assets,holdings){
+    const cashBank=assets.filter(a=>a.type==='cash'||a.type==='bank');
+    const credits=assets.filter(a=>a.type==='credit');
+    const stockAccs=assets.filter(a=>a.type==='stock_account');
+    const totalCB=cashBank.reduce((s,a)=>s+parseFloat(a.balance||0),0);
+    const totalSB=stockAccs.reduce((s,a)=>s+parseFloat(a.balance||0),0);
+    const totalSV=holdings.reduce((s,h)=>s+parseFloat(h.market_value||0),0);
+    const totalCr=credits.reduce((s,a)=>s+parseFloat(a.used_amount||0),0);
+    const net=totalCB+totalSB+totalSV-totalCr;
+
+    document.getElementById('total-amount').textContent=net.toLocaleString();
+    document.getElementById('total-time').textContent=`更新於 ${new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})}`;
+    document.getElementById('mini-bank').textContent=(totalCB+totalSB).toLocaleString();
+    document.getElementById('mini-stock').textContent=totalSV.toLocaleString();
+    document.getElementById('mini-credit').textContent=totalCr.toLocaleString();
+
+    document.getElementById('cash-bank-list').innerHTML=[...cashBank,...stockAccs].map(a=>{
+      const isCash=a.type==='cash',isSt=a.type==='stock_account';
+      const icon=isCash?'💵':isSt?'📊':'🏦';
+      const col=isSt?'var(--purple)':parseFloat(a.balance||0)>=0?'var(--green)':'var(--red)';
+      const typeLabel=isCash?'現金':isSt?'券商帳戶':'銀行存款';
+      return `<div class="asset-item">
+        <div class="asset-icon">${icon}</div>
+        <div class="asset-info"><div class="asset-name">${a.name}</div><div class="asset-type">${typeLabel}</div></div>
+        <div class="asset-right"><div class="asset-balance" style="color:${col}">NT$ ${parseFloat(a.balance||0).toLocaleString()}</div></div>
+      </div>`;
+    }).join('')||`<div class="empty-row">無帳戶資料</div>`;
+
+    document.getElementById('credit-list').innerHTML=credits.map(a=>{
+      const rem=parseFloat(a.credit_limit||0)-parseFloat(a.used_amount||0);
+      const pct=a.credit_limit>0?Math.round((a.used_amount/a.credit_limit)*100):0;
+      return `<div class="asset-item">
+        <div class="asset-icon">💳</div>
+        <div class="asset-info"><div class="asset-name">${a.name}</div><div class="asset-type">額度使用 ${pct}%</div></div>
+        <div class="asset-right">
+          <div class="asset-balance" style="color:var(--red)">-NT$ ${parseFloat(a.used_amount||0).toLocaleString()}</div>
+          <div class="asset-sub">剩餘 NT$ ${rem.toLocaleString()}</div>
+        </div>
+      </div>`;
+    }).join('')||`<div class="empty-row">無信用卡</div>`;
+
+    document.getElementById('stock-list').innerHTML=holdings.map(h=>{
+      const p=parseFloat(h.profit||0),r=parseFloat(h.return_rate||0),up=p>=0;
+      return `<div class="stock-item">
+        <div class="stock-code">${h.stock_code}</div>
+        <div class="stock-info">
+          <div class="stock-name">${h.stock_name}</div>
+          <div class="stock-detail">${h.shares}股 · 均價 ${h.avg_cost} · 現價 ${h.current_price}</div>
+        </div>
+        <div class="stock-right">
+          <div class="stock-value">NT$ ${parseFloat(h.market_value||0).toLocaleString()}</div>
+          <div class="stock-profit ${up?'up':'down'}">${up?'+':''}${p.toLocaleString()} (${up?'+':''}${r}%)</div>
+        </div>
+      </div>`;
+    }).join('')||`<div class="empty-row">目前無持股</div>`;
+  }
+
+  function closeLiff(){if(isDevMode){alert('DEV');return;}liff.closeWindow();}
+  init().catch(()=>{document.getElementById('loading').innerHTML='<div style="color:var(--text3);padding:40px;text-align:center">載入失敗</div>';});
+</script>
+</body>
+</html>
