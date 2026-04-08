@@ -280,14 +280,19 @@
     txId = params.get('tx_id');
 
     try {
-      await liff.init({ liffId: LIFF_ID });
-      accessToken = liff.getAccessToken();
-    } catch(e) {
-      // 開發模式：在一般瀏覽器開啟
-      console.warn('LIFF init failed, entering dev mode');
-      isDevMode = true;
-      document.body.insertAdjacentHTML('beforeend', '<div class="dev-badge">DEV MODE</div>');
-    }
+  await liff.init({ liffId: LIFF_ID });
+  if (!liff.isInClient()) {
+    // 不在 LINE 內開啟，進入 DEV MODE
+    isDevMode = true;
+    document.body.insertAdjacentHTML('beforeend', '<div class="dev-badge">DEV MODE</div>');
+  } else {
+    accessToken = liff.getAccessToken();
+  }
+} catch(e) {
+  console.warn('LIFF init failed, entering dev mode');
+  isDevMode = true;
+  document.body.insertAdjacentHTML('beforeend', '<div class="dev-badge">DEV MODE</div>');
+}
 
     if (isDevMode) {
   txId = txId || 'test-id';
