@@ -28,7 +28,6 @@
       padding-bottom: 100px;
     }
 
-    /* Header */
     .header {
       background: white;
       padding: 16px 20px;
@@ -40,308 +39,149 @@
       top: 0;
       z-index: 10;
     }
-    .header-title {
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--text);
-    }
+    .header-title { font-size: 17px; font-weight: 700; color: var(--text); }
     .header-close {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--gray);
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      color: var(--text2);
+      width: 32px; height: 32px;
+      border-radius: 50%; background: var(--gray);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: var(--text2);
     }
 
-    /* Type Toggle */
     .type-section {
-      background: white;
-      margin: 12px 16px;
-      border-radius: var(--radius);
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      background: white; margin: 12px 16px;
+      border-radius: var(--radius); padding: 16px;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .type-label {
-      font-size: 15px;
-      color: var(--text2);
-    }
+    .type-label { font-size: 15px; color: var(--text2); }
     .type-toggle {
-      display: flex;
-      background: var(--gray);
-      border-radius: 10px;
-      padding: 3px;
-      gap: 3px;
+      display: flex; background: var(--gray);
+      border-radius: 10px; padding: 3px; gap: 3px;
     }
     .type-btn {
-      padding: 7px 20px;
-      border-radius: 8px;
-      border: none;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
+      padding: 7px 20px; border-radius: 8px; border: none;
+      font-size: 14px; font-weight: 600; cursor: pointer;
       font-family: 'Noto Sans TC', sans-serif;
-      transition: all 0.2s;
-      color: var(--text2);
-      background: transparent;
+      transition: all 0.2s; color: var(--text2); background: transparent;
     }
-    .type-btn.active-expense {
-      background: var(--red);
-      color: white;
-    }
-    .type-btn.active-income {
-      background: var(--green);
-      color: white;
-    }
+    .type-btn.active-expense { background: var(--red); color: white; }
+    .type-btn.active-income { background: var(--green); color: white; }
 
-    /* Card */
-    .card {
-      background: white;
-      margin: 8px 16px;
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
+    .card { background: white; margin: 8px 16px; border-radius: var(--radius); overflow: hidden; }
 
-    /* Field */
     .field {
-      padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--gray);
-      cursor: pointer;
-      min-height: 52px;
+      padding: 14px 16px; display: flex; align-items: center;
+      justify-content: space-between; border-bottom: 1px solid var(--gray);
+      cursor: pointer; min-height: 52px;
     }
     .field:last-child { border-bottom: none; }
-    .field-label {
-      font-size: 15px;
-      color: var(--text2);
-      flex-shrink: 0;
-      min-width: 60px;
-    }
-    .field-value {
-      font-size: 15px;
-      color: var(--text);
-      text-align: right;
-      flex: 1;
-    }
+    .field-label { font-size: 15px; color: var(--text2); flex-shrink: 0; min-width: 60px; }
+    .field-value { font-size: 15px; color: var(--text); text-align: right; flex: 1; }
     .field-value.placeholder { color: var(--text2); }
-    .field-arrow {
-      color: var(--text2);
-      margin-left: 8px;
-      font-size: 12px;
-    }
+    .field-arrow { color: var(--text2); margin-left: 8px; font-size: 12px; }
 
-    /* Amount */
-    .amount-section {
-      background: white;
-      margin: 8px 16px;
-      border-radius: var(--radius);
-      padding: 16px;
-    }
-    .amount-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    .amount-section { background: white; margin: 8px 16px; border-radius: var(--radius); padding: 16px; }
+    .amount-row { display: flex; align-items: center; justify-content: space-between; }
     .amount-label { font-size: 15px; color: var(--text2); }
-    .amount-input-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .amount-sign {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--red);
-    }
+    .amount-input-wrap { display: flex; align-items: center; gap: 8px; }
+    .amount-sign { font-size: 18px; font-weight: 700; color: var(--red); }
     .amount-sign.income { color: var(--green); }
     .amount-input {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--text);
-      border: none;
-      outline: none;
-      text-align: right;
-      width: 160px;
+      font-size: 24px; font-weight: 700; color: var(--text);
+      border: none; outline: none; text-align: right; width: 160px;
       font-family: 'Noto Sans TC', sans-serif;
     }
-    .amount-currency {
-      font-size: 14px;
-      color: var(--text2);
-    }
+    .amount-currency { font-size: 14px; color: var(--text2); }
 
-    /* Category Grid */
-    .category-panel {
-      display: none;
-      padding: 12px 16px;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
+    .category-panel { display: none; padding: 12px 16px; flex-wrap: wrap; gap: 8px; }
     .category-panel.open { display: flex; }
     .cat-btn {
-      padding: 8px 16px;
-      border-radius: 20px;
-      border: 1.5px solid var(--gray2);
-      background: white;
-      font-size: 13px;
-      cursor: pointer;
+      padding: 8px 16px; border-radius: 20px;
+      border: 1.5px solid var(--gray2); background: white;
+      font-size: 13px; cursor: pointer;
       font-family: 'Noto Sans TC', sans-serif;
-      color: var(--text);
-      transition: all 0.15s;
+      color: var(--text); transition: all 0.15s;
     }
     .cat-btn.selected {
-      border-color: var(--green);
-      background: var(--green-light);
-      color: var(--green);
-      font-weight: 600;
+      border-color: var(--green); background: var(--green-light);
+      color: var(--green); font-weight: 600;
     }
 
-    /* Note */
-    .note-section {
-      background: white;
-      margin: 8px 16px;
-      border-radius: var(--radius);
-      padding: 16px;
-    }
+    .note-section { background: white; margin: 8px 16px; border-radius: var(--radius); padding: 16px; }
     .note-label { font-size: 15px; color: var(--text2); margin-bottom: 10px; }
     .note-input {
-      width: 100%;
-      border: 1.5px solid var(--gray2);
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 15px;
+      width: 100%; border: 1.5px solid var(--gray2);
+      border-radius: 10px; padding: 12px; font-size: 15px;
       font-family: 'Noto Sans TC', sans-serif;
-      outline: none;
-      resize: none;
-      color: var(--text);
-      transition: border-color 0.2s;
+      outline: none; resize: none; color: var(--text); transition: border-color 0.2s;
     }
     .note-input:focus { border-color: var(--green); }
 
-    /* Bottom Buttons */
     .bottom-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 12px 16px;
-      background: white;
-      border-top: 1px solid var(--gray2);
-      display: flex;
-      gap: 10px;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      padding: 12px 16px; background: white;
+      border-top: 1px solid var(--gray2); display: flex; gap: 10px;
     }
     .btn-delete {
-      flex: 1;
-      padding: 14px;
-      border-radius: var(--radius);
-      border: none;
-      background: var(--red-light);
-      color: var(--red);
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
+      flex: 1; padding: 14px; border-radius: var(--radius);
+      border: none; background: var(--red-light); color: var(--red);
+      font-size: 15px; font-weight: 600; cursor: pointer;
       font-family: 'Noto Sans TC', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
     }
     .btn-save {
-      flex: 2;
-      padding: 14px;
-      border-radius: var(--radius);
-      border: none;
-      background: var(--green);
-      color: white;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
+      flex: 2; padding: 14px; border-radius: var(--radius);
+      border: none; background: var(--green); color: white;
+      font-size: 15px; font-weight: 700; cursor: pointer;
       font-family: 'Noto Sans TC', sans-serif;
     }
     .btn-save:active { opacity: 0.85; }
 
-    /* Loading */
     .loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      gap: 16px;
-      color: var(--text2);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      height: 100vh; gap: 16px; color: var(--text2);
     }
     .spinner {
-      width: 36px;
-      height: 36px;
-      border: 3px solid var(--gray2);
-      border-top-color: var(--green);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      width: 36px; height: 36px;
+      border: 3px solid var(--gray2); border-top-color: var(--green);
+      border-radius: 50%; animation: spin 0.8s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Select Modal */
     .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.4);
-      z-index: 100;
-      align-items: flex-end;
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4); z-index: 100; align-items: flex-end;
     }
     .modal-overlay.open { display: flex; }
     .modal {
-      background: white;
-      width: 100%;
-      border-radius: 20px 20px 0 0;
-      padding: 20px 16px 40px;
-      max-height: 70vh;
-      overflow-y: auto;
+      background: white; width: 100%;
+      border-radius: 20px 20px 0 0; padding: 20px 16px 40px;
+      max-height: 70vh; overflow-y: auto;
     }
-    .modal-title {
-      font-size: 16px;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 16px;
-      color: var(--text);
-    }
+    .modal-title { font-size: 16px; font-weight: 700; text-align: center; margin-bottom: 16px; color: var(--text); }
     .modal-item {
-      padding: 14px 16px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 15px;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding: 14px 16px; border-radius: 10px; cursor: pointer;
+      font-size: 15px; color: var(--text);
+      display: flex; align-items: center; justify-content: space-between;
     }
     .modal-item:hover { background: var(--gray); }
     .modal-item.selected { color: var(--green); font-weight: 600; }
     .modal-item.selected::after { content: '✓'; }
 
-    /* Toast */
     .toast {
-      position: fixed;
-      top: 20px;
-      left: 50%;
+      position: fixed; top: 20px; left: 50%;
       transform: translateX(-50%) translateY(-80px);
-      background: #333;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 20px;
-      font-size: 14px;
-      z-index: 200;
-      transition: transform 0.3s;
+      background: #333; color: white; padding: 10px 20px;
+      border-radius: 20px; font-size: 14px; z-index: 200; transition: transform 0.3s;
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
+
+    .dev-badge {
+      position: fixed; top: 8px; right: 8px;
+      background: orange; color: white; font-size: 11px;
+      padding: 3px 8px; border-radius: 10px; z-index: 999;
+    }
   </style>
 </head>
 <body>
@@ -352,13 +192,11 @@
 </div>
 
 <div id="app" style="display:none">
-  <!-- Header -->
   <div class="header">
     <div class="header-title">編輯記帳</div>
     <button class="header-close" onclick="closeLiff()">✕</button>
   </div>
 
-  <!-- Type Toggle -->
   <div class="type-section">
     <span class="type-label">屬性</span>
     <div class="type-toggle">
@@ -367,7 +205,6 @@
     </div>
   </div>
 
-  <!-- Amount -->
   <div class="amount-section">
     <div class="amount-row">
       <span class="amount-label">金額</span>
@@ -379,7 +216,6 @@
     </div>
   </div>
 
-  <!-- Category -->
   <div class="card">
     <div class="field" onclick="toggleCategory()">
       <span class="field-label">類型</span>
@@ -389,7 +225,6 @@
     <div class="category-panel" id="category-panel"></div>
   </div>
 
-  <!-- Asset & Date -->
   <div class="card">
     <div class="field" onclick="openModal('asset')">
       <span class="field-label">帳戶</span>
@@ -402,20 +237,17 @@
     </div>
   </div>
 
-  <!-- Note -->
   <div class="note-section">
     <div class="note-label">備註</div>
     <textarea class="note-input" id="note-input" rows="2" placeholder="輸入備註..."></textarea>
   </div>
 
-  <!-- Bottom Bar -->
   <div class="bottom-bar">
     <button class="btn-delete" onclick="confirmDelete()">🗑 刪除</button>
     <button class="btn-save" onclick="saveRecord()">儲存</button>
   </div>
 </div>
 
-<!-- Asset Modal -->
 <div class="modal-overlay" id="asset-modal" onclick="closeModal('asset')">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-title">選擇帳戶</div>
@@ -423,18 +255,13 @@
   </div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-  // ============================
-  // 設定區（請修改這裡）
-  // ============================
   const LIFF_ID = '2009720131-1IsEQKIQ';
   const N8N_WEBHOOK_GET = 'https://aldrichc.zeabur.app/webhook/18e29c1d-5b3c-49df-aa16-878a9abd6cbf';
   const N8N_WEBHOOK_UPDATE = 'https://aldrichc.zeabur.app/webhook/ecd97b5a-f198-4dce-9862-a39130ec06e9';
   const N8N_WEBHOOK_DELETE = 'https://aldrichc.zeabur.app/webhook/fc20e1fb-e4f7-4bd9-9664-69895c1e7eb7';
-  // ============================
 
   const CATEGORIES_EXPENSE = ['伙食費','交通費','居家','娛樂','購物','醫藥','生活','其他'];
   const CATEGORIES_INCOME = ['薪資','獎金','投資收益','其他'];
@@ -445,25 +272,54 @@
   let selectedAssetId = null;
   let selectedCategory = null;
   let currentType = 'expense';
+  let isDevMode = false;
+  let accessToken = null;
 
   async function init() {
-    await liff.init({ liffId: LIFF_ID });
-
-    // 從 URL 取得 tx_id
     const params = new URLSearchParams(location.search);
     txId = params.get('tx_id');
+
+    try {
+      await liff.init({ liffId: LIFF_ID });
+      accessToken = liff.getAccessToken();
+    } catch(e) {
+      // 開發模式：在一般瀏覽器開啟
+      console.warn('LIFF init failed, entering dev mode');
+      isDevMode = true;
+      document.body.insertAdjacentHTML('beforeend', '<div class="dev-badge">DEV MODE</div>');
+    }
+
+    if (isDevMode) {
+      // 開發模式使用假資料
+      txId = txId || 'test-id';
+      txData = {
+        type: 'expense',
+        amount: 250,
+        category: '伙食費',
+        asset_id: null,
+        transaction_date: new Date().toISOString().split('T')[0],
+        item: '午餐'
+      };
+      assets = [
+        { id: '1', name: '現金', type: 'cash' },
+        { id: '2', name: '中信', type: 'bank' }
+      ];
+      renderForm();
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      return;
+    }
 
     if (!txId) {
       showToast('找不到記帳資料');
       return;
     }
 
-    // 取得記帳資料
-    const token = liff.getAccessToken();
+    // 正式模式：呼叫 n8n 取得資料
     const res = await fetch(N8N_WEBHOOK_GET, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tx_id: txId, token })
+      body: JSON.stringify({ tx_id: txId, token: accessToken })
     });
     const data = await res.json();
     txData = data.transaction;
@@ -475,27 +331,16 @@
   }
 
   function renderForm() {
-    // Type
     currentType = txData.type === 'income' ? 'income' : 'expense';
     setType(currentType);
-
-    // Amount
     document.getElementById('amount-input').value = txData.amount;
-
-    // Category
     selectedCategory = txData.category;
     document.getElementById('category-display').textContent = selectedCategory || '請選擇類別';
     renderCategoryPanel();
-
-    // Asset
     selectedAssetId = txData.asset_id;
     const asset = assets.find(a => a.id === selectedAssetId);
     document.getElementById('asset-display').textContent = asset?.name || '請選擇帳戶';
-
-    // Date
     document.getElementById('date-input').value = txData.transaction_date;
-
-    // Note
     document.getElementById('note-input').value = txData.item || '';
   }
 
@@ -504,12 +349,10 @@
     const expBtn = document.getElementById('btn-expense');
     const incBtn = document.getElementById('btn-income');
     const sign = document.getElementById('amount-sign');
-
     expBtn.className = 'type-btn' + (type === 'expense' ? ' active-expense' : '');
     incBtn.className = 'type-btn' + (type === 'income' ? ' active-income' : '');
     sign.textContent = type === 'income' ? '+' : '-';
     sign.className = 'amount-sign' + (type === 'income' ? ' income' : '');
-
     renderCategoryPanel();
   }
 
@@ -531,7 +374,6 @@
   function selectCategory(cat) {
     selectedCategory = cat;
     document.getElementById('category-display').textContent = cat;
-    document.getElementById('category-display').classList.remove('placeholder');
     renderCategoryPanel();
   }
 
@@ -556,7 +398,6 @@
   function selectAsset(id, name) {
     selectedAssetId = id;
     document.getElementById('asset-display').textContent = name;
-    document.getElementById('asset-display').classList.remove('placeholder');
     closeModal('asset');
   }
 
@@ -569,39 +410,37 @@
     if (!selectedCategory) { showToast('請選擇類別'); return; }
     if (!date) { showToast('請選擇日期'); return; }
 
-    const token = liff.getAccessToken();
+    if (isDevMode) { showToast('DEV: 儲存成功（模擬）'); return; }
+
     await fetch(N8N_WEBHOOK_UPDATE, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        tx_id: txId,
-        token,
-        amount,
-        category: selectedCategory,
+        tx_id: txId, token: accessToken,
+        amount, category: selectedCategory,
         asset_id: selectedAssetId,
         transaction_date: date,
-        item: note,
-        type: currentType
+        item: note, type: currentType
       })
     });
-
     showToast('儲存成功！');
     setTimeout(() => liff.closeWindow(), 1200);
   }
 
   async function confirmDelete() {
     if (!confirm('確定要刪除這筆記錄嗎？')) return;
-    const token = liff.getAccessToken();
+    if (isDevMode) { showToast('DEV: 刪除成功（模擬）'); return; }
     await fetch(N8N_WEBHOOK_DELETE, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tx_id: txId, token })
+      body: JSON.stringify({ tx_id: txId, token: accessToken })
     });
     showToast('已刪除');
     setTimeout(() => liff.closeWindow(), 1200);
   }
 
   function closeLiff() {
+    if (isDevMode) { showToast('DEV: 關閉視窗'); return; }
     liff.closeWindow();
   }
 
@@ -614,7 +453,7 @@
 
   init().catch(e => {
     console.error(e);
-    document.getElementById('loading').innerHTML = '<div style="color:#888;padding:20px">載入失敗，請重試</div>';
+    document.getElementById('loading').innerHTML = '<div style="color:#888;padding:40px;text-align:center">載入失敗，請重試</div>';
   });
 </script>
 </body>
