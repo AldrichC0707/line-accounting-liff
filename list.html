@@ -5,40 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>記帳明細</title>
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --green: #1DB446;
-      --green-dark: #179939;
-      --green-light: #e8f8ed;
-      --red: #FF5555;
-      --red-light: #fff0f0;
-      --gray: #f5f5f5;
-      --gray2: #e8e8e8;
-      --gray3: #999;
-      --text: #1a1a1a;
-      --text2: #666;
+      --cream: #FAF7F2;
+      --paper: #F5F0E8;
+      --paper2: #EDE8DF;
+      --warm: #8B6F47;
+      --warm-light: #C4A882;
+      --warm-dark: #5C4A2A;
+      --accent: #D4845A;
+      --accent-light: #F2D4C4;
+      --green: #5A8A6A;
+      --green-light: #D4E8DA;
+      --red: #B85450;
+      --red-light: #F2D4D2;
+      --text: #2C1F14;
+      --text2: #7A6555;
+      --text3: #B0A090;
+      --shadow: 0 2px 12px rgba(139,111,71,0.12);
+      --shadow-hover: 0 4px 20px rgba(139,111,71,0.2);
       --radius: 16px;
-      --bg: #f2f4f7;
     }
 
     body {
       font-family: 'Noto Sans TC', sans-serif;
-      background: var(--bg);
+      background: var(--cream);
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(212,132,90,0.04) 0%, transparent 60%),
+        radial-gradient(circle at 80% 20%, rgba(90,138,106,0.04) 0%, transparent 60%);
       min-height: 100vh;
       padding-bottom: 80px;
     }
 
-    /* Header */
+    /* Paper texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
     .header {
-      background: white;
+      background: var(--paper);
+      border-bottom: 1.5px solid var(--paper2);
       padding: 14px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid var(--gray2);
       position: sticky;
       top: 0;
       z-index: 20;
@@ -48,170 +65,178 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      background: var(--gray);
+      background: white;
+      border: 1.5px solid var(--paper2);
       border-radius: 10px;
       padding: 8px 14px;
       cursor: pointer;
-      border: none;
-      font-family: 'Noto Sans TC', sans-serif;
+      font-family: 'Noto Serif TC', serif;
       font-size: 15px;
       font-weight: 700;
-      color: var(--text);
+      color: var(--warm-dark);
+      box-shadow: var(--shadow);
     }
 
-    .month-selector .arrow { font-size: 10px; color: var(--gray3); }
-
-    .header-actions { display: flex; gap: 8px; }
     .header-btn {
       width: 36px; height: 36px;
       border-radius: 50%;
-      background: var(--gray);
-      border: none;
+      background: white;
+      border: 1.5px solid var(--paper2);
       cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px;
+      font-size: 15px;
+      color: var(--text2);
+      box-shadow: var(--shadow);
     }
 
     /* Summary Card */
     .summary-card {
-      margin: 12px 16px;
-      background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+      margin: 14px 16px;
+      background: white;
       border-radius: var(--radius);
+      border: 1.5px solid var(--paper2);
       padding: 20px;
-      color: white;
+      box-shadow: var(--shadow);
       position: relative;
       overflow: hidden;
     }
 
-    .summary-card::before {
-      content: '';
-      position: absolute;
-      top: -30px; right: -30px;
-      width: 120px; height: 120px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.08);
-    }
-
     .summary-card::after {
-      content: '';
+      content: '¥';
       position: absolute;
-      bottom: -20px; right: 40px;
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.05);
+      right: -10px; bottom: -20px;
+      font-size: 100px;
+      font-family: 'Noto Serif TC', serif;
+      color: var(--paper);
+      font-weight: 900;
+      pointer-events: none;
     }
 
     .summary-label {
-      font-size: 12px;
-      opacity: 0.8;
-      margin-bottom: 4px;
+      font-size: 11px;
+      color: var(--text3);
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      font-family: 'Noto Serif TC', serif;
     }
 
     .summary-balance {
-      font-size: 36px;
+      font-size: 38px;
       font-weight: 900;
-      letter-spacing: -1px;
+      font-family: 'Noto Serif TC', serif;
+      letter-spacing: -2px;
+      color: var(--text);
       margin-bottom: 16px;
     }
 
-    .summary-row {
-      display: flex;
-      gap: 24px;
+    .summary-balance.negative { color: var(--red); }
+    .summary-balance.positive { color: var(--green); }
+
+    .summary-divider {
+      height: 1px;
+      background: var(--paper2);
+      margin-bottom: 14px;
     }
 
+    .summary-row { display: flex; gap: 0; }
     .summary-item { flex: 1; }
-    .summary-item-label { font-size: 11px; opacity: 0.7; margin-bottom: 2px; }
-    .summary-item-value { font-size: 16px; font-weight: 700; }
+    .summary-item + .summary-item { border-left: 1px solid var(--paper2); padding-left: 16px; }
+    .summary-item-label { font-size: 11px; color: var(--text3); margin-bottom: 4px; }
+    .summary-item-value { font-size: 17px; font-weight: 700; font-family: 'Noto Serif TC', serif; }
+    .summary-item-value.exp { color: var(--red); }
+    .summary-item-value.inc { color: var(--green); }
 
     /* Tab */
     .tab-bar {
-      margin: 0 16px 12px;
+      margin: 0 16px 14px;
       display: flex;
       background: white;
+      border: 1.5px solid var(--paper2);
       border-radius: 12px;
       padding: 4px;
       gap: 4px;
+      box-shadow: var(--shadow);
     }
 
     .tab-btn {
-      flex: 1; padding: 8px;
+      flex: 1; padding: 9px;
       border-radius: 9px; border: none;
       font-size: 13px; font-weight: 600;
       cursor: pointer;
       font-family: 'Noto Sans TC', sans-serif;
-      color: var(--gray3);
+      color: var(--text3);
       background: transparent;
       transition: all 0.2s;
     }
 
     .tab-btn.active {
-      background: var(--green);
+      background: var(--accent);
       color: white;
+      box-shadow: 0 2px 8px rgba(212,132,90,0.3);
     }
 
     /* Date Group */
-    .date-group { margin-bottom: 4px; }
-
     .date-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 16px 6px;
+      padding: 10px 20px 6px;
     }
 
     .date-label {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
-      color: var(--text2);
+      color: var(--text3);
+      font-family: 'Noto Serif TC', serif;
+      letter-spacing: 0.5px;
     }
 
     .date-total {
       font-size: 13px;
       font-weight: 700;
-      color: var(--text2);
+      font-family: 'Noto Serif TC', serif;
     }
 
-    /* Transaction Item */
     .tx-list {
       background: white;
-      margin: 0 16px;
+      margin: 0 16px 4px;
       border-radius: var(--radius);
+      border: 1.5px solid var(--paper2);
       overflow: hidden;
+      box-shadow: var(--shadow);
     }
 
     .tx-item {
       display: flex;
       align-items: center;
       padding: 14px 16px;
-      border-bottom: 1px solid var(--gray);
+      border-bottom: 1px dashed var(--paper2);
       cursor: pointer;
-      transition: background 0.15s;
       gap: 12px;
+      transition: background 0.15s;
     }
 
     .tx-item:last-child { border-bottom: none; }
-    .tx-item:active { background: var(--gray); }
+    .tx-item:active { background: var(--cream); }
 
     .tx-icon {
-      width: 40px; height: 40px;
-      border-radius: 12px;
+      width: 38px; height: 38px;
+      border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
+      font-size: 17px;
       flex-shrink: 0;
+      border: 1.5px solid var(--paper2);
     }
-
-    .tx-icon.expense { background: #fff0f0; }
-    .tx-icon.income { background: #e8f8ed; }
-    .tx-icon.transfer { background: #e8f0ff; }
-    .tx-icon.credit { background: #fff5e8; }
 
     .tx-info { flex: 1; min-width: 0; }
+
     .tx-category {
-      font-size: 12px;
-      color: var(--green);
+      font-size: 11px;
+      color: var(--warm-light);
       font-weight: 600;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
+      letter-spacing: 0.3px;
     }
+
     .tx-item-name {
       font-size: 14px;
       font-weight: 500;
@@ -221,145 +246,87 @@
       text-overflow: ellipsis;
     }
 
-    .tx-right { text-align: right; flex-shrink: 0; }
     .tx-amount {
       font-size: 15px;
       font-weight: 700;
+      font-family: 'Noto Serif TC', serif;
     }
+
     .tx-amount.negative { color: var(--red); }
     .tx-amount.positive { color: var(--green); }
-
-    .tx-arrow { font-size: 12px; color: var(--gray2); margin-top: 2px; }
-
-    /* Loading */
-    .loading {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      height: 100vh; gap: 16px; color: var(--gray3);
-    }
-    .spinner {
-      width: 32px; height: 32px;
-      border: 3px solid var(--gray2);
-      border-top-color: var(--green);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* Empty */
     .empty {
       text-align: center;
       padding: 60px 20px;
-      color: var(--gray3);
+      color: var(--text3);
     }
-    .empty-icon { font-size: 40px; margin-bottom: 12px; }
-    .empty-text { font-size: 14px; }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.6; }
+    .empty-text { font-size: 14px; font-family: 'Noto Serif TC', serif; }
 
-    /* Month Picker Modal */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.4); z-index: 100; align-items: flex-end;
-    }
+    /* Loading */
+    .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; gap: 16px; color: var(--text3); background: var(--cream); }
+    .spinner { width: 32px; height: 32px; border: 2px solid var(--paper2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Month Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(44,31,20,0.4); z-index: 100; align-items: flex-end; }
     .modal-overlay.open { display: flex; }
-    .modal {
-      background: white; width: 100%;
-      border-radius: 20px 20px 0 0;
-      padding: 20px 16px 40px;
-    }
-    .modal-title {
-      font-size: 16px; font-weight: 700;
-      text-align: center; margin-bottom: 16px;
-    }
-    .modal-year {
-      display: flex; align-items: center;
-      justify-content: center; gap: 20px;
-      margin-bottom: 20px;
-    }
-    .year-btn {
-      width: 36px; height: 36px;
-      border-radius: 50%; border: 1.5px solid var(--gray2);
-      background: white; cursor: pointer; font-size: 16px;
-    }
-    .year-label { font-size: 18px; font-weight: 700; }
-    .month-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
-    }
-    .month-btn {
-      padding: 12px; border-radius: 10px;
-      border: 1.5px solid var(--gray2);
-      background: white; cursor: pointer;
-      font-size: 14px; font-weight: 500;
-      font-family: 'Noto Sans TC', sans-serif;
-      color: var(--text); transition: all 0.15s;
-    }
-    .month-btn.selected {
-      background: var(--green); color: white; border-color: var(--green);
-    }
+    .modal { background: var(--paper); width: 100%; border-radius: 20px 20px 0 0; padding: 20px 16px 40px; border-top: 2px solid var(--paper2); }
+    .modal-title { font-size: 16px; font-weight: 700; text-align: center; margin-bottom: 16px; font-family: 'Noto Serif TC', serif; color: var(--warm-dark); }
+    .modal-year { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; }
+    .year-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--paper2); background: white; cursor: pointer; font-size: 16px; color: var(--text2); }
+    .year-label { font-size: 18px; font-weight: 700; font-family: 'Noto Serif TC', serif; color: var(--warm-dark); }
+    .month-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .month-btn { padding: 12px; border-radius: 10px; border: 1.5px solid var(--paper2); background: white; cursor: pointer; font-size: 14px; font-weight: 500; font-family: 'Noto Sans TC', sans-serif; color: var(--text); }
+    .month-btn.selected { background: var(--accent); color: white; border-color: var(--accent); }
 
-    /* Dev Badge */
-    .dev-badge {
-      position: fixed; top: 8px; right: 8px;
-      background: orange; color: white; font-size: 11px;
-      padding: 3px 8px; border-radius: 10px; z-index: 999;
-    }
+    .dev-badge { position: fixed; top: 8px; right: 8px; background: #D4845A; color: white; font-size: 11px; padding: 3px 8px; border-radius: 10px; z-index: 999; }
 
-    /* Fade in animation */
-    .fade-in {
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .fade-in { animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
-
 <div id="loading" class="loading">
   <div class="spinner"></div>
-  <div>載入中...</div>
+  <div style="font-family:'Noto Serif TC',serif">載入中...</div>
 </div>
 
 <div id="app" style="display:none">
-  <!-- Header -->
   <div class="header">
     <button class="month-selector" onclick="openMonthPicker()">
       <span id="month-display">2026 年 04 月</span>
-      <span class="arrow">▼</span>
+      <span style="font-size:10px;color:var(--text3)">▼</span>
     </button>
-    <div class="header-actions">
-      <button class="header-btn" onclick="closeLiff()">✕</button>
-    </div>
+    <button class="header-btn" onclick="closeLiff()">✕</button>
   </div>
 
-  <!-- Summary -->
-  <div class="summary-card" id="summary-card">
-    <div class="summary-label">月結餘（NT$）</div>
+  <div class="summary-card">
+    <div class="summary-label">本月結餘</div>
     <div class="summary-balance" id="summary-balance">0</div>
+    <div class="summary-divider"></div>
     <div class="summary-row">
       <div class="summary-item">
         <div class="summary-item-label">月支出</div>
-        <div class="summary-item-value" id="summary-expense">0</div>
+        <div class="summary-item-value exp" id="summary-expense">0</div>
       </div>
       <div class="summary-item">
         <div class="summary-item-label">月收入</div>
-        <div class="summary-item-value" id="summary-income">0</div>
+        <div class="summary-item-value inc" id="summary-income">0</div>
       </div>
     </div>
   </div>
 
-  <!-- Tab -->
   <div class="tab-bar">
     <button class="tab-btn active" id="tab-all" onclick="setTab('all')">全部</button>
     <button class="tab-btn" id="tab-expense" onclick="setTab('expense')">支出</button>
     <button class="tab-btn" id="tab-income" onclick="setTab('income')">收入</button>
   </div>
 
-  <!-- Transaction List -->
   <div id="tx-container"></div>
 </div>
 
-<!-- Month Picker -->
 <div class="modal-overlay" id="month-modal" onclick="closeMonthPicker()">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-title">選擇月份</div>
@@ -374,235 +341,135 @@
 
 <script>
   const LIFF_ID = '2009720131-1IsEQKIQ';
-  const N8N_WEBHOOK_LIST = 'https://aldrichc.zeabur.app/webhook/liff-get-list';
+  const N8N_WEBHOOK_LIST = 'https://aldrichc.zeabur.app/webhook/f7dddde5-90d3-4422-a712-2d7724f89855';
   const LIFF_EDIT_URL = 'https://liff.line.me/2009720131-1IsEQKIQ';
 
-  let allTx = [];
-  let currentTab = 'all';
-  let currentYear = new Date().getFullYear();
-  let currentMonth = new Date().getMonth() + 1;
-  let pickerYear = currentYear;
-  let lineUserId = null;
-  let isDevMode = false;
-
   const CATEGORY_ICONS = {
-    '伙食費': '🍜', '交通費': '🚗', '居家': '🏠', '娛樂': '🎮',
-    '購物': '🛍️', '醫藥': '💊', '生活': '✂️', '薪資': '💰',
-    '獎金': '🎁', '投資收益': '📈', '其他': '📝'
+    '伙食費':'🍜','交通費':'🚗','居家':'🏠','娛樂':'🎮',
+    '購物':'🛍️','醫藥':'💊','生活':'✂️','薪資':'💼',
+    '獎金':'🎁','投資收益':'📊','其他':'📝'
   };
+
+  let allTx=[], currentTab='all';
+  let currentYear=new Date().getFullYear(), currentMonth=new Date().getMonth()+1;
+  let pickerYear=currentYear, lineUserId=null, isDevMode=false;
 
   async function init() {
     try {
       await liff.init({ liffId: LIFF_ID });
-      if (!liff.isInClient()) {
-        isDevMode = true;
-        document.body.insertAdjacentHTML('beforeend', '<div class="dev-badge">DEV MODE</div>');
-      } else {
-        lineUserId = liff.getContext().userId;
-      }
-    } catch(e) {
-      isDevMode = true;
-      document.body.insertAdjacentHTML('beforeend', '<div class="dev-badge">DEV MODE</div>');
-    }
-
-    // 從 URL 取得參數
-    const params = new URLSearchParams(location.search);
-    if (params.get('year')) currentYear = parseInt(params.get('year'));
-    if (params.get('month')) currentMonth = parseInt(params.get('month'));
-    pickerYear = currentYear;
-
+      if (!liff.isInClient()) { isDevMode=true; document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>'); }
+      else lineUserId = liff.getContext().userId;
+    } catch(e) { isDevMode=true; document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>'); }
     await loadData();
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
+    document.getElementById('loading').style.display='none';
+    document.getElementById('app').style.display='block';
   }
 
   async function loadData() {
-    updateMonthDisplay();
-
+    document.getElementById('month-display').textContent=`${currentYear} 年 ${String(currentMonth).padStart(2,'0')} 月`;
     if (isDevMode) {
-      // 假資料
-      allTx = [
-        { id: '1', type: 'expense', amount: 250, category: '伙食費', item: '午餐', transaction_date: '2026-04-08', asset_id: null },
-        { id: '2', type: 'expense', amount: 150, category: '交通費', item: '捷運', transaction_date: '2026-04-08', asset_id: null },
-        { id: '3', type: 'income', amount: 50000, category: '薪資', item: '薪資收入', transaction_date: '2026-04-05', asset_id: null },
-        { id: '4', type: 'expense', amount: 800, category: '購物', item: '衣服', transaction_date: '2026-04-03', asset_id: null },
+      allTx=[
+        {id:'1',type:'expense',amount:250,category:'伙食費',item:'午餐',transaction_date:'2026-04-08'},
+        {id:'2',type:'expense',amount:150,category:'交通費',item:'捷運',transaction_date:'2026-04-08'},
+        {id:'3',type:'income',amount:50000,category:'薪資',item:'薪資收入',transaction_date:'2026-04-05'},
+        {id:'4',type:'expense',amount:800,category:'購物',item:'衣服',transaction_date:'2026-04-03'},
       ];
     } else {
-      const startDate = `${currentYear}-${String(currentMonth).padStart(2, '0')}-01`;
-      const lastDay = new Date(currentYear, currentMonth, 0).getDate();
-      const endDate = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${lastDay}`;
-
-      const res = await fetch(N8N_WEBHOOK_LIST, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ line_user_id: lineUserId, start_date: startDate, end_date: endDate })
-      });
-      const data = await res.json();
-      allTx = data.transactions || [];
+      const s=`${currentYear}-${String(currentMonth).padStart(2,'0')}-01`;
+      const e=`${currentYear}-${String(currentMonth).padStart(2,'0')}-${new Date(currentYear,currentMonth,0).getDate()}`;
+      const res=await fetch(N8N_WEBHOOK_LIST,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_user_id:lineUserId,start_date:s,end_date:e})});
+      allTx=(await res.json()).transactions||[];
     }
-
-    renderSummary();
-    renderList();
+    renderSummary(); renderList();
   }
 
   function renderSummary() {
-    const expense = allTx
-      .filter(tx => tx.type === 'expense' || tx.type === 'credit_expense')
-      .reduce((sum, tx) => sum + parseFloat(tx.amount || 0), 0);
-    const income = allTx
-      .filter(tx => tx.type === 'income')
-      .reduce((sum, tx) => sum + parseFloat(tx.amount || 0), 0);
-    const balance = income - expense;
-
-    document.getElementById('summary-balance').textContent = balance.toLocaleString();
-    document.getElementById('summary-expense').textContent = expense.toLocaleString();
-    document.getElementById('summary-income').textContent = income.toLocaleString();
+    const exp=allTx.filter(t=>t.type==='expense'||t.type==='credit_expense').reduce((s,t)=>s+parseFloat(t.amount||0),0);
+    const inc=allTx.filter(t=>t.type==='income').reduce((s,t)=>s+parseFloat(t.amount||0),0);
+    const bal=inc-exp;
+    const balEl=document.getElementById('summary-balance');
+    balEl.textContent=bal.toLocaleString();
+    balEl.className='summary-balance '+(bal>=0?'positive':'negative');
+    document.getElementById('summary-expense').textContent=exp.toLocaleString();
+    document.getElementById('summary-income').textContent=inc.toLocaleString();
   }
 
   function setTab(tab) {
-    currentTab = tab;
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(`tab-${tab}`).classList.add('active');
+    currentTab=tab;
+    ['all','expense','income'].forEach(t=>document.getElementById(`tab-${t}`).classList.toggle('active',t===tab));
     renderList();
   }
 
   function renderList() {
-    let filtered = allTx.filter(tx => !tx.is_deleted);
+    let filtered=allTx.filter(t=>!t.is_deleted);
+    if(currentTab==='expense') filtered=filtered.filter(t=>t.type==='expense'||t.type==='credit_expense');
+    else if(currentTab==='income') filtered=filtered.filter(t=>t.type==='income');
 
-    if (currentTab === 'expense') {
-      filtered = filtered.filter(tx => tx.type === 'expense' || tx.type === 'credit_expense');
-    } else if (currentTab === 'income') {
-      filtered = filtered.filter(tx => tx.type === 'income');
-    }
+    const groups={};
+    filtered.forEach(t=>{ const d=t.transaction_date; if(!groups[d])groups[d]=[]; groups[d].push(t); });
+    const container=document.getElementById('tx-container');
 
-    // 依日期分組
-    const groups = {};
-    filtered.forEach(tx => {
-      const date = tx.transaction_date;
-      if (!groups[date]) groups[date] = [];
-      groups[date].push(tx);
-    });
-
-    const container = document.getElementById('tx-container');
-
-    if (filtered.length === 0) {
-      container.innerHTML = `
-        <div class="empty">
-          <div class="empty-icon">📭</div>
-          <div class="empty-text">這個月還沒有記錄</div>
-        </div>
-      `;
+    if(!filtered.length){
+      container.innerHTML=`<div class="empty"><div class="empty-icon">📭</div><div class="empty-text">這個月還沒有記錄</div></div>`;
       return;
     }
 
-    const sortedDates = Object.keys(groups).sort((a, b) => b.localeCompare(a));
-
-    container.innerHTML = sortedDates.map(date => {
-      const txs = groups[date];
-      const dayTotal = txs.reduce((sum, tx) => {
-        if (tx.type === 'expense' || tx.type === 'credit_expense') return sum - parseFloat(tx.amount || 0);
-        if (tx.type === 'income') return sum + parseFloat(tx.amount || 0);
-        return sum;
-      }, 0);
-
-      const dateObj = new Date(date);
-      const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
-      const dateLabel = `${String(dateObj.getMonth() + 1).padStart(2, '0')}/${String(dateObj.getDate()).padStart(2, '0')}（${weekDays[dateObj.getDay()]}）`;
-
-      const txItems = txs.map(tx => {
-        const isNegative = tx.type === 'expense' || tx.type === 'credit_expense';
-        const icon = CATEGORY_ICONS[tx.category] || '📝';
-        const iconClass = tx.type === 'income' ? 'income' : tx.type === 'credit_expense' ? 'credit' : 'expense';
-
-        return `
-          <div class="tx-item" onclick="openEdit('${tx.id}')">
-            <div class="tx-icon ${iconClass}">${icon}</div>
-            <div class="tx-info">
-              <div class="tx-category">${tx.category || '其他'}</div>
-              <div class="tx-item-name">${tx.item || '未命名'}</div>
-            </div>
-            <div class="tx-right">
-              <div class="tx-amount ${isNegative ? 'negative' : 'positive'}">
-                ${isNegative ? '-' : '+'}${parseFloat(tx.amount).toLocaleString()}
-              </div>
-            </div>
-            <div style="color:#ccc;font-size:12px">›</div>
-          </div>
-        `;
-      }).join('');
+    const weekDays=['日','一','二','三','四','五','六'];
+    container.innerHTML=Object.keys(groups).sort((a,b)=>b.localeCompare(a)).map(date=>{
+      const txs=groups[date];
+      const dayTotal=txs.reduce((s,t)=>{
+        if(t.type==='expense'||t.type==='credit_expense') return s-parseFloat(t.amount||0);
+        if(t.type==='income') return s+parseFloat(t.amount||0);
+        return s;
+      },0);
+      const d=new Date(date);
+      const dateLabel=`${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')} ${weekDays[d.getDay()]}`;
 
       return `
-        <div class="date-group fade-in">
+        <div class="fade-in">
           <div class="date-header">
             <span class="date-label">${dateLabel}</span>
-            <span class="date-total" style="color:${dayTotal >= 0 ? 'var(--green)' : 'var(--red)'}">
-              NT$ ${dayTotal >= 0 ? '+' : ''}${dayTotal.toLocaleString()}
-            </span>
+            <span class="date-total" style="color:${dayTotal>=0?'var(--green)':'var(--red)'}">${dayTotal>=0?'+':''}${dayTotal.toLocaleString()}</span>
           </div>
-          <div class="tx-list">${txItems}</div>
+          <div class="tx-list">
+            ${txs.map(tx=>{
+              const isNeg=tx.type==='expense'||tx.type==='credit_expense';
+              return `
+                <div class="tx-item" onclick="openEdit('${tx.id}')">
+                  <div class="tx-icon">${CATEGORY_ICONS[tx.category]||'📝'}</div>
+                  <div class="tx-info">
+                    <div class="tx-category">${tx.category||'其他'}</div>
+                    <div class="tx-item-name">${tx.item||'未命名'}</div>
+                  </div>
+                  <div class="tx-amount ${isNeg?'negative':'positive'}">${isNeg?'-':'+'}${parseFloat(tx.amount).toLocaleString()}</div>
+                  <div style="color:var(--paper2);font-size:14px;margin-left:4px">›</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
         </div>
       `;
     }).join('');
   }
 
   function openEdit(txId) {
-    if (isDevMode) {
-      alert('DEV: 開啟編輯 ' + txId);
-      return;
-    }
-    liff.openWindow({
-      url: `${LIFF_EDIT_URL}?tx_id=${txId}`,
-      external: false
-    });
+    if(isDevMode){alert('DEV: '+txId);return;}
+    liff.openWindow({ url:`${LIFF_EDIT_URL}?tx_id=${txId}`, external:false });
   }
 
-  function updateMonthDisplay() {
-    document.getElementById('month-display').textContent =
-      `${currentYear} 年 ${String(currentMonth).padStart(2, '0')} 月`;
-  }
-
-  function openMonthPicker() {
-    pickerYear = currentYear;
-    renderMonthGrid();
-    document.getElementById('month-modal').classList.add('open');
-  }
-
-  function closeMonthPicker() {
-    document.getElementById('month-modal').classList.remove('open');
-  }
-
-  function changeYear(delta) {
-    pickerYear += delta;
-    document.getElementById('picker-year').textContent = pickerYear;
-    renderMonthGrid();
-  }
-
-  function renderMonthGrid() {
-    document.getElementById('picker-year').textContent = pickerYear;
-    const grid = document.getElementById('month-grid');
-    grid.innerHTML = Array.from({length: 12}, (_, i) => {
-      const m = i + 1;
-      const isSelected = pickerYear === currentYear && m === currentMonth;
-      return `<button class="month-btn ${isSelected ? 'selected' : ''}" onclick="selectMonth(${m})">${m} 月</button>`;
+  function openMonthPicker(){pickerYear=currentYear;renderMonthGrid();document.getElementById('month-modal').classList.add('open');}
+  function closeMonthPicker(){document.getElementById('month-modal').classList.remove('open');}
+  function changeYear(d){pickerYear+=d;document.getElementById('picker-year').textContent=pickerYear;renderMonthGrid();}
+  function renderMonthGrid(){
+    document.getElementById('picker-year').textContent=pickerYear;
+    document.getElementById('month-grid').innerHTML=Array.from({length:12},(_,i)=>{
+      const m=i+1,sel=pickerYear===currentYear&&m===currentMonth;
+      return `<button class="month-btn ${sel?'selected':''}" onclick="selectMonth(${m})">${m} 月</button>`;
     }).join('');
   }
-
-  function selectMonth(month) {
-    currentYear = pickerYear;
-    currentMonth = month;
-    closeMonthPicker();
-    loadData();
-  }
-
-  function closeLiff() {
-    if (isDevMode) { alert('DEV: 關閉'); return; }
-    liff.closeWindow();
-  }
-
-  init().catch(e => {
-    console.error(e);
-    document.getElementById('loading').innerHTML = '<div style="color:#888;padding:40px;text-align:center">載入失敗，請重試</div>';
-  });
+  function selectMonth(m){currentYear=pickerYear;currentMonth=m;closeMonthPicker();loadData();}
+  function closeLiff(){if(isDevMode){alert('DEV');return;}liff.closeWindow();}
+  init().catch(()=>{document.getElementById('loading').innerHTML='<div style="color:var(--text3);padding:40px;text-align:center;font-family:Noto Serif TC,serif">載入失敗，請重試</div>';});
 </script>
 </body>
 </html>
