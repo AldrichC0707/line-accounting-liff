@@ -290,25 +290,24 @@
     }
 
     if (isDevMode) {
-      // 開發模式使用假資料
-      txId = txId || 'test-id';
-      txData = {
-        type: 'expense',
-        amount: 250,
-        category: '伙食費',
-        asset_id: null,
-        transaction_date: new Date().toISOString().split('T')[0],
-        item: '午餐'
-      };
-      assets = [
-        { id: '1', name: '現金', type: 'cash' },
-        { id: '2', name: '中信', type: 'bank' }
-      ];
-      renderForm();
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-      return;
-    }
+  txId = txId || 'test-id';
+  txData = {
+    type: 'expense',
+    amount: 250,
+    category: '伙食費',
+    asset_id: null,
+    transaction_date: new Date().toISOString().split('T')[0],
+    item: '午餐'
+  };
+  assets = [
+    { id: '1', name: '現金', type: 'cash' },
+    { id: '2', name: '中信', type: 'bank' }
+  ];
+  renderForm();
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  return;  // ← 這行很重要，確保 DEV MODE 後不繼續執行
+}
 
     if (!txId) {
       showToast('找不到記帳資料');
