@@ -25,7 +25,6 @@
       --text2: #7A6555;
       --text3: #B0A090;
       --shadow: 0 2px 12px rgba(139,111,71,0.12);
-      --shadow-hover: 0 4px 20px rgba(139,111,71,0.2);
       --radius: 16px;
     }
 
@@ -39,7 +38,6 @@
       padding-bottom: 80px;
     }
 
-    /* Paper texture overlay */
     body::before {
       content: '';
       position: fixed;
@@ -88,7 +86,6 @@
       box-shadow: var(--shadow);
     }
 
-    /* Summary Card */
     .summary-card {
       margin: 14px 16px;
       background: white;
@@ -145,7 +142,6 @@
     .summary-item-value.exp { color: var(--red); }
     .summary-item-value.inc { color: var(--green); }
 
-    /* Tab */
     .tab-bar {
       margin: 0 16px 14px;
       display: flex;
@@ -174,7 +170,6 @@
       box-shadow: 0 2px 8px rgba(212,132,90,0.3);
     }
 
-    /* Date Group */
     .date-header {
       display: flex;
       align-items: center;
@@ -255,7 +250,6 @@
     .tx-amount.negative { color: var(--red); }
     .tx-amount.positive { color: var(--green); }
 
-    /* Empty */
     .empty {
       text-align: center;
       padding: 60px 20px;
@@ -264,12 +258,10 @@
     .empty-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.6; }
     .empty-text { font-size: 14px; font-family: 'Noto Serif TC', serif; }
 
-    /* Loading */
     .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; gap: 16px; color: var(--text3); background: var(--cream); }
     .spinner { width: 32px; height: 32px; border: 2px solid var(--paper2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Month Modal */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(44,31,20,0.4); z-index: 100; align-items: flex-end; }
     .modal-overlay.open { display: flex; }
     .modal { background: var(--paper); width: 100%; border-radius: 20px 20px 0 0; padding: 20px 16px 40px; border-top: 2px solid var(--paper2); }
@@ -358,12 +350,17 @@
     alert('init start');
     try {
       await liff.init({ liffId: LIFF_ID });
-      if (!liff.isInClient()) { isDevMode=true; document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>'); }
-      else lineUserId = liff.getContext().userId;
+      if (!liff.isInClient()) {
+        isDevMode=true;
+        document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>');
+      } else {
+        lineUserId = liff.getContext().userId;
+        alert('userId: ' + lineUserId);
+      }
     } catch(e) {
       alert('LIFF init failed: ' + e.message);
       isDevMode=true;
-      document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>');); 
+      document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>');
     }
     await loadData();
     document.getElementById('loading').style.display='none';
@@ -382,6 +379,7 @@
     } else {
       const s=`${currentYear}-${String(currentMonth).padStart(2,'0')}-01`;
       const e=`${currentYear}-${String(currentMonth).padStart(2,'0')}-${new Date(currentYear,currentMonth,0).getDate()}`;
+      alert('fetching data for: ' + lineUserId);
       const res=await fetch(N8N_WEBHOOK_LIST,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_user_id:lineUserId,start_date:s,end_date:e})});
       allTx=(await res.json()).transactions||[];
     }
@@ -474,7 +472,10 @@
   }
   function selectMonth(m){currentYear=pickerYear;currentMonth=m;closeMonthPicker();loadData();}
   function closeLiff(){if(isDevMode){alert('DEV');return;}liff.closeWindow();}
-  init().catch(()=>{document.getElementById('loading').innerHTML='<div style="color:var(--text3);padding:40px;text-align:center;font-family:Noto Serif TC,serif">載入失敗，請重試</div>';});
+  init().catch((e)=>{
+    alert('init error: ' + e.message);
+    document.getElementById('loading').innerHTML='<div style="color:var(--text3);padding:40px;text-align:center;font-family:Noto Serif TC,serif">載入失敗，請重試</div>';
+  });
 </script>
 </body>
 </html>
