@@ -359,7 +359,11 @@
       await liff.init({ liffId: LIFF_ID });
       if (!liff.isInClient()) { isDevMode=true; document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>'); }
       else lineUserId = liff.getContext().userId;
-    } catch(e) { isDevMode=true; document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>'); }
+    } catch(e) {
+      alert('LIFF init failed: ' + e.message);
+      isDevMode=true;
+      document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>');); 
+    }
     await loadData();
     document.getElementById('loading').style.display='none';
     document.getElementById('app').style.display='block';
