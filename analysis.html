@@ -22,7 +22,6 @@
     .header{background:var(--paper);border-bottom:1.5px solid var(--paper2);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;}
     .month-selector{display:flex;align-items:center;gap:8px;background:white;border:1.5px solid var(--paper2);border-radius:10px;padding:8px 14px;cursor:pointer;font-family:'Noto Serif TC',serif;font-size:15px;font-weight:700;color:var(--warm-dark);box-shadow:var(--shadow);}
     .header-btn{width:36px;height:36px;border-radius:50%;background:white;border:1.5px solid var(--paper2);cursor:pointer;font-size:15px;color:var(--text2);box-shadow:var(--shadow);}
-
     .summary-card{margin:14px 16px;background:white;border-radius:var(--radius);border:1.5px solid var(--paper2);padding:20px;box-shadow:var(--shadow);}
     .summary-label{font-size:11px;color:var(--text3);letter-spacing:0.5px;margin-bottom:6px;font-family:'Noto Serif TC',serif;}
     .summary-balance{font-size:38px;font-weight:900;font-family:'Noto Serif TC',serif;letter-spacing:-2px;color:var(--text);margin-bottom:16px;}
@@ -34,11 +33,9 @@
     .summary-item-label{font-size:11px;color:var(--text3);margin-bottom:4px;}
     .summary-item-value{font-size:17px;font-weight:700;font-family:'Noto Serif TC',serif;}
     .exp{color:var(--red);} .inc{color:var(--green);}
-
     .tab-bar{margin:0 16px 14px;display:flex;background:white;border:1.5px solid var(--paper2);border-radius:12px;padding:4px;gap:4px;box-shadow:var(--shadow);}
     .tab-btn{flex:1;padding:9px;border-radius:9px;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:'Noto Sans TC',sans-serif;color:var(--text3);background:transparent;transition:all 0.2s;}
     .tab-btn.active{background:var(--accent);color:white;box-shadow:0 2px 8px rgba(212,132,90,0.3);}
-
     .chart-card{margin:0 16px 14px;background:white;border-radius:var(--radius);border:1.5px solid var(--paper2);padding:20px;box-shadow:var(--shadow);}
     .chart-title{font-size:12px;color:var(--text3);font-family:'Noto Serif TC',serif;margin-bottom:16px;letter-spacing:0.5px;}
     .donut-wrap{position:relative;width:180px;height:180px;margin:0 auto 16px;}
@@ -50,7 +47,6 @@
     .legend{display:flex;flex-wrap:wrap;gap:6px 12px;justify-content:center;}
     .legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);}
     .legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-
     .category-list{background:white;margin:0 16px;border-radius:var(--radius);border:1.5px solid var(--paper2);overflow:hidden;box-shadow:var(--shadow);}
     .category-item{padding:14px 16px;border-bottom:1px dashed var(--paper2);}
     .category-item:last-child{border-bottom:none;}
@@ -61,12 +57,10 @@
     .cat-bar-bg{height:5px;background:var(--paper2);border-radius:3px;overflow:hidden;}
     .cat-bar{height:100%;border-radius:3px;transition:width 0.6s ease;}
     .cat-pct{font-size:10px;color:var(--text3);margin-top:4px;text-align:right;font-family:'Noto Serif TC',serif;}
-
-    .empty{text-align:center;padding:40px 20px;color:var(--text3);}
+    .empty{text-align:center;padding:40px 20px;color:var(--text3);font-family:'Noto Serif TC',serif;}
     .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:16px;color:var(--text3);background:var(--cream);}
     .spinner{width:32px;height:32px;border:2px solid var(--paper2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;}
     @keyframes spin{to{transform:rotate(360deg);}}
-
     .modal-overlay{display:none;position:fixed;inset:0;background:rgba(44,31,20,0.4);z-index:100;align-items:flex-end;}
     .modal-overlay.open{display:flex;}
     .modal{background:var(--paper);width:100%;border-radius:20px 20px 0 0;padding:20px 16px 40px;border-top:2px solid var(--paper2);}
@@ -87,7 +81,7 @@
     <button class="month-selector" onclick="openMonthPicker()">
       <span id="month-display">2026 年 04 月</span><span style="font-size:10px;color:var(--text3)">▼</span>
     </button>
-    <button class="header-btn" onclick="close()">✕</button>
+    <button class="header-btn" onclick="closeLiff()">✕</button>
   </div>
 
   <div class="summary-card">
@@ -134,20 +128,33 @@
 </div>
 
 <script>
-  const LIFF_ID='2009720131-X0VIaGC2';
-  const N8N='https://aldrichc.zeabur.app/webhook/f7dddde5-90d3-4422-a712-2d7724f89855';
+  const LIFF_ID='2009777350-UCqGP1Pa';
+  const N8N='https://aldrichc.zeabur.app/webhook/6ac8c6b5-be70-4cc5-a06b-1b730d8f7916';
   const COLORS=['#D4845A','#5A8A6A','#8B6F47','#B85450','#C4A882','#7A6555','#A0856A','#6B8F7A','#C4885A','#8A7060'];
 
-  let allTx=[],currentTab='expense';
+  let data={},currentTab='expense';
   let currentYear=new Date().getFullYear(),currentMonth=new Date().getMonth()+1;
   let pickerYear=currentYear,lineUserId=null,isDevMode=false;
 
   async function init(){
     try{
       await liff.init({liffId:LIFF_ID});
-      if(!liff.isInClient()){isDevMode=true;document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>');}
-      else lineUserId=liff.getContext().userId;
-    }catch(e){isDevMode=true;document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>');}
+      if(!liff.isInClient()){
+        isDevMode=true;
+        document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>');
+      }else{
+        try{
+          const profile=await liff.getProfile();
+          lineUserId=profile.userId;
+        }catch(e){
+          document.getElementById('loading').innerHTML='<div style="color:var(--text3);padding:40px;text-align:center">無法取得用戶資訊</div>';
+          return;
+        }
+      }
+    }catch(e){
+      isDevMode=true;
+      document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>');
+    }
     await loadData();
     document.getElementById('loading').style.display='none';
     document.getElementById('app').style.display='block';
@@ -156,24 +163,34 @@
   async function loadData(){
     document.getElementById('month-display').textContent=`${currentYear} 年 ${String(currentMonth).padStart(2,'0')} 月`;
     if(isDevMode){
-      allTx=[
-        {type:'expense',amount:2200,category:'伙食費'},{type:'expense',amount:1500,category:'購物'},
-        {type:'expense',amount:800,category:'交通費'},{type:'expense',amount:500,category:'娛樂'},
-        {type:'income',amount:50000,category:'薪資'},{type:'income',amount:1000,category:'獎金'}
-      ];
+      data={
+        totalExpense:5000,totalIncome:51000,balance:46000,
+        expenseByCategory:[
+          {category:'伙食費',amount:2200,pct:44},
+          {category:'購物',amount:1500,pct:30},
+          {category:'交通費',amount:800,pct:16},
+          {category:'娛樂',amount:500,pct:10}
+        ],
+        incomeByCategory:[
+          {category:'薪資',amount:50000,pct:98},
+          {category:'獎金',amount:1000,pct:2}
+        ],
+        daily:[]
+      };
     }else{
       const s=`${currentYear}-${String(currentMonth).padStart(2,'0')}-01`;
       const e=`${currentYear}-${String(currentMonth).padStart(2,'0')}-${new Date(currentYear,currentMonth,0).getDate()}`;
       const res=await fetch(N8N,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_user_id:lineUserId,start_date:s,end_date:e})});
-      allTx=(await res.json()).transactions||[];
+      data=await res.json();
     }
-    renderSummary();renderChart();
+    renderSummary();
+    renderChart();
   }
 
   function renderSummary(){
-    const e=allTx.filter(t=>t.type==='expense'||t.type==='credit_expense').reduce((s,t)=>s+parseFloat(t.amount||0),0);
-    const i=allTx.filter(t=>t.type==='income').reduce((s,t)=>s+parseFloat(t.amount||0),0);
-    const b=i-e;
+    const e=data.totalExpense||0;
+    const i=data.totalIncome||0;
+    const b=data.balance||(i-e);
     const bEl=document.getElementById('bal');
     bEl.textContent=b.toLocaleString();
     bEl.className='summary-balance '+(b>=0?'pos':'neg');
@@ -189,17 +206,14 @@
 
   function renderChart(){
     const isExp=currentTab==='expense';
-    const filtered=allTx.filter(t=>isExp?(t.type==='expense'||t.type==='credit_expense'):t.type==='income');
-    const total=filtered.reduce((s,t)=>s+parseFloat(t.amount||0),0);
+    const cats=isExp?(data.expenseByCategory||[]):(data.incomeByCategory||[]);
+    const total=isExp?(data.totalExpense||0):(data.totalIncome||0);
+
     document.getElementById('chart-title').textContent=isExp?'支出分類':'收入分類';
     document.getElementById('donut-label').textContent=isExp?'總支出':'總收入';
     document.getElementById('donut-amount').textContent=total.toLocaleString();
 
-    const catMap={};
-    filtered.forEach(t=>{const c=t.category||'其他';catMap[c]=(catMap[c]||0)+parseFloat(t.amount||0);});
-    const cats=Object.entries(catMap).sort((a,b)=>b[1]-a[1]);
-
-    if(!total){
+    if(!total||!cats.length){
       document.getElementById('donut-svg').innerHTML=`<circle cx="90" cy="90" r="60" fill="none" stroke="#EDE8DF" stroke-width="28"/>`;
       document.getElementById('legend').innerHTML='';
       document.getElementById('cat-list').innerHTML='<div class="empty">📭 這個月沒有記錄</div>';
@@ -208,23 +222,23 @@
 
     const r=60,cx=90,cy=90,circ=2*Math.PI*r;
     let off=0;
-    const segs=cats.map(([,amt],i)=>{
-      const d=(amt/total)*circ;
+    const segs=cats.map((c,i)=>{
+      const d=(c.amount/total)*circ;
       const s=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${COLORS[i%COLORS.length]}" stroke-width="28" stroke-dasharray="${d} ${circ-d}" stroke-dashoffset="${-off}"/>`;
       off+=d; return s;
     });
     document.getElementById('donut-svg').innerHTML=segs.join('')+`<circle cx="${cx}" cy="${cy}" r="46" fill="white"/>`;
 
-    document.getElementById('legend').innerHTML=cats.map(([n],i)=>
-      `<div class="legend-item"><div class="legend-dot" style="background:${COLORS[i%COLORS.length]}"></div>${n}</div>`
+    document.getElementById('legend').innerHTML=cats.map((c,i)=>
+      `<div class="legend-item"><div class="legend-dot" style="background:${COLORS[i%COLORS.length]}"></div>${c.category}</div>`
     ).join('');
 
-    document.getElementById('cat-list').innerHTML=cats.map(([n,amt],i)=>{
-      const p=((amt/total)*100).toFixed(1);
+    document.getElementById('cat-list').innerHTML=cats.map((c,i)=>{
+      const p=((c.amount/total)*100).toFixed(1);
       return `<div class="category-item">
         <div class="category-header">
-          <div class="category-name"><div class="category-dot" style="background:${COLORS[i%COLORS.length]}"></div>${n}</div>
-          <div class="category-amount ${isExp?'exp':'inc'}">NT$ ${amt.toLocaleString()}</div>
+          <div class="category-name"><div class="category-dot" style="background:${COLORS[i%COLORS.length]}"></div>${c.category}</div>
+          <div class="category-amount ${isExp?'exp':'inc'}">NT$ ${c.amount.toLocaleString()}</div>
         </div>
         <div class="cat-bar-bg"><div class="cat-bar" style="width:${p}%;background:${COLORS[i%COLORS.length]}"></div></div>
         <div class="cat-pct">${p}%</div>
@@ -243,7 +257,7 @@
     }).join('');
   }
   function selectMonth(m){currentYear=pickerYear;currentMonth=m;closeMonthPicker();loadData();}
-  function closeLiff(){if(isDevMode){alert('DEV');return;}liff.closeWindow();}
+  function closeLiff(){if(isDevMode){return;}liff.closeWindow();}
   init().catch(()=>{document.getElementById('loading').innerHTML='<div style="color:var(--text3);padding:40px;text-align:center">載入失敗</div>';});
 </script>
 </body>
