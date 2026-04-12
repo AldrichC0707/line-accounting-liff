@@ -7,187 +7,266 @@
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    *{box-sizing:border-box;margin:0;padding:0;}
-    :root{
-      --cream:#FAF7F2;--paper:#F5F0E8;--paper2:#EDE8DF;
-      --warm:#8B6F47;--warm-light:#C4A882;--warm-dark:#5C4A2A;
-      --accent:#D4845A;
-      --green:#5A8A6A;--red:#B85450;
-      --text:#2C1F14;--text2:#7A6555;--text3:#B0A090;
-      --shadow:0 2px 12px rgba(139,111,71,0.12);
-      --radius:16px;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #FAF7F2; --paper: #F5F0E8; --paper2: #EDE8DF;
+      --warm: #8B6F47; --warm-light: #C4A882; --warm-dark: #5C4A2A;
+      --accent: #D4845A; --accent-light: #F2D4C4;
+      --green: #5A8A6A; --green-light: #D4E8DA;
+      --red: #B85450; --red-light: #F2D4D2;
+      --text: #2C1F14; --text2: #7A6555; --text3: #B0A090;
+      --shadow: 0 2px 12px rgba(139,111,71,0.12); --radius: 16px;
     }
-    body{font-family:'Noto Sans TC',sans-serif;background:var(--cream);min-height:100vh;padding-bottom:40px;}
-    .header{background:var(--paper);border-bottom:1.5px solid var(--paper2);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;}
-    .header-title{font-size:17px;font-weight:700;font-family:'Noto Serif TC',serif;color:var(--warm-dark);}
-    .header-btn{width:36px;height:36px;border-radius:50%;background:white;border:1.5px solid var(--paper2);cursor:pointer;font-size:15px;color:var(--text2);box-shadow:var(--shadow);}
-
-    .month-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--paper);}
-    .month-btn{width:36px;height:36px;border-radius:50%;background:white;border:1.5px solid var(--paper2);cursor:pointer;font-size:16px;color:var(--text2);box-shadow:var(--shadow);}
-    .month-label{font-size:16px;font-weight:700;font-family:'Noto Serif TC',serif;color:var(--warm-dark);}
-
-    .summary-row{display:flex;gap:8px;margin:12px 16px;}
-    .summary-card{flex:1;background:white;border-radius:12px;border:1.5px solid var(--paper2);padding:12px;box-shadow:var(--shadow);text-align:center;}
-    .summary-label{font-size:10px;color:var(--text3);margin-bottom:4px;font-family:'Noto Serif TC',serif;}
-    .summary-value{font-size:15px;font-weight:700;font-family:'Noto Serif TC',serif;}
-
-    .section{margin:0 16px 12px;}
-    .date-header{font-size:12px;color:var(--text3);padding:10px 4px 6px;font-family:'Noto Serif TC',serif;border-bottom:1px solid var(--paper2);margin-bottom:4px;}
-
-    .tx-list{background:white;border-radius:var(--radius);border:1.5px solid var(--paper2);overflow:hidden;box-shadow:var(--shadow);margin-bottom:8px;}
-    .tx-item{display:flex;align-items:center;padding:12px 16px;border-bottom:1px dashed var(--paper2);gap:12px;cursor:pointer;}
-    .tx-item:last-child{border-bottom:none;}
-    .tx-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;border:1.5px solid var(--paper2);}
-    .tx-info{flex:1;}
-    .tx-name{font-size:14px;font-weight:600;color:var(--text);}
-    .tx-cat{font-size:11px;color:var(--text3);margin-top:2px;}
-    .tx-right{text-align:right;}
-    .tx-amount{font-size:15px;font-weight:700;font-family:'Noto Serif TC',serif;}
-    .tx-asset{font-size:11px;color:var(--text3);margin-top:2px;}
-
-    .empty{padding:40px;text-align:center;color:var(--text3);font-family:'Noto Serif TC',serif;}
-    .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:16px;color:var(--text3);background:var(--cream);}
-    .spinner{width:32px;height:32px;border:2px solid var(--paper2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;}
-    @keyframes spin{to{transform:rotate(360deg);}}
+    body { font-family: 'Noto Sans TC', sans-serif; background: var(--cream); background-image: radial-gradient(circle at 20% 50%, rgba(212,132,90,0.04) 0%, transparent 60%), radial-gradient(circle at 80% 20%, rgba(90,138,106,0.04) 0%, transparent 60%); min-height: 100vh; padding-bottom: 80px; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; }
+    .header { background: var(--paper); border-bottom: 1.5px solid var(--paper2); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 20; }
+    .month-selector { display: flex; align-items: center; gap: 8px; background: white; border: 1.5px solid var(--paper2); border-radius: 10px; padding: 8px 14px; cursor: pointer; font-family: 'Noto Serif TC', serif; font-size: 15px; font-weight: 700; color: var(--warm-dark); box-shadow: var(--shadow); }
+    .header-btn { width: 36px; height: 36px; border-radius: 50%; background: white; border: 1.5px solid var(--paper2); cursor: pointer; font-size: 15px; color: var(--text2); box-shadow: var(--shadow); }
+    .summary-card { margin: 14px 16px; background: white; border-radius: var(--radius); border: 1.5px solid var(--paper2); padding: 20px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+    .summary-card::after { content: '¥'; position: absolute; right: -10px; bottom: -20px; font-size: 100px; font-family: 'Noto Serif TC', serif; color: var(--paper); font-weight: 900; pointer-events: none; }
+    .summary-label { font-size: 11px; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 6px; font-family: 'Noto Serif TC', serif; }
+    .summary-balance { font-size: 38px; font-weight: 900; font-family: 'Noto Serif TC', serif; letter-spacing: -2px; color: var(--text); margin-bottom: 16px; }
+    .summary-balance.negative { color: var(--red); } .summary-balance.positive { color: var(--green); }
+    .summary-divider { height: 1px; background: var(--paper2); margin-bottom: 14px; }
+    .summary-row { display: flex; gap: 0; } .summary-item { flex: 1; }
+    .summary-item + .summary-item { border-left: 1px solid var(--paper2); padding-left: 16px; }
+    .summary-item-label { font-size: 11px; color: var(--text3); margin-bottom: 4px; }
+    .summary-item-value { font-size: 17px; font-weight: 700; font-family: 'Noto Serif TC', serif; }
+    .summary-item-value.exp { color: var(--red); } .summary-item-value.inc { color: var(--green); }
+    .tab-bar { margin: 0 16px 14px; display: flex; background: white; border: 1.5px solid var(--paper2); border-radius: 12px; padding: 4px; gap: 4px; box-shadow: var(--shadow); }
+    .tab-btn { flex: 1; padding: 9px; border-radius: 9px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Noto Sans TC', sans-serif; color: var(--text3); background: transparent; transition: all 0.2s; }
+    .tab-btn.active { background: var(--accent); color: white; box-shadow: 0 2px 8px rgba(212,132,90,0.3); }
+    .date-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px 6px; }
+    .date-label { font-size: 12px; font-weight: 700; color: var(--text3); font-family: 'Noto Serif TC', serif; letter-spacing: 0.5px; }
+    .date-total { font-size: 13px; font-weight: 700; font-family: 'Noto Serif TC', serif; }
+    .tx-list { background: white; margin: 0 16px 4px; border-radius: var(--radius); border: 1.5px solid var(--paper2); overflow: hidden; box-shadow: var(--shadow); }
+    .tx-item { display: flex; align-items: center; padding: 14px 16px; border-bottom: 1px dashed var(--paper2); cursor: pointer; gap: 12px; transition: background 0.15s; }
+    .tx-item:last-child { border-bottom: none; } .tx-item:active { background: var(--cream); }
+    .tx-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; border: 1.5px solid var(--paper2); }
+    .tx-info { flex: 1; min-width: 0; }
+    .tx-category { font-size: 11px; color: var(--warm-light); font-weight: 600; margin-bottom: 3px; letter-spacing: 0.3px; }
+    .tx-item-name { font-size: 14px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tx-amount { font-size: 15px; font-weight: 700; font-family: 'Noto Serif TC', serif; }
+    .tx-amount.negative { color: var(--red); } .tx-amount.positive { color: var(--green); }
+    .empty { text-align: center; padding: 60px 20px; color: var(--text3); }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.6; }
+    .empty-text { font-size: 14px; font-family: 'Noto Serif TC', serif; }
+    .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; gap: 16px; color: var(--text3); background: var(--cream); }
+    .spinner { width: 32px; height: 32px; border: 2px solid var(--paper2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(44,31,20,0.4); z-index: 100; align-items: flex-end; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--paper); width: 100%; border-radius: 20px 20px 0 0; padding: 20px 16px 40px; border-top: 2px solid var(--paper2); }
+    .modal-title { font-size: 16px; font-weight: 700; text-align: center; margin-bottom: 16px; font-family: 'Noto Serif TC', serif; color: var(--warm-dark); }
+    .modal-year { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; }
+    .year-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--paper2); background: white; cursor: pointer; font-size: 16px; color: var(--text2); }
+    .year-label { font-size: 18px; font-weight: 700; font-family: 'Noto Serif TC', serif; color: var(--warm-dark); }
+    .month-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .month-btn { padding: 12px; border-radius: 10px; border: 1.5px solid var(--paper2); background: white; cursor: pointer; font-size: 14px; font-weight: 500; font-family: 'Noto Sans TC', sans-serif; color: var(--text); }
+    .month-btn.selected { background: var(--accent); color: white; border-color: var(--accent); }
+    .dev-badge { position: fixed; top: 8px; right: 8px; background: #D4845A; color: white; font-size: 11px; padding: 3px 8px; border-radius: 10px; z-index: 999; }
+    .fade-in { animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
-<div id="loading" class="loading"><div class="spinner"></div><div style="font-family:'Noto Serif TC',serif">載入中...</div></div>
+<div id="loading" class="loading">
+  <div class="spinner"></div>
+  <div style="font-family:'Noto Serif TC',serif">載入中...</div>
+</div>
+
 <div id="app" style="display:none">
   <div class="header">
-    <div class="header-title">📋 記帳明細</div>
+    <button class="month-selector" onclick="openMonthPicker()">
+      <span id="month-display">2026 年 04 月</span>
+      <span style="font-size:10px;color:var(--text3)">▼</span>
+    </button>
     <button class="header-btn" onclick="closeLiff()">✕</button>
   </div>
-  <div class="month-nav">
-    <button class="month-btn" onclick="changeMonth(-1)">‹</button>
-    <div class="month-label" id="month-label"></div>
-    <button class="month-btn" onclick="changeMonth(1)">›</button>
+
+  <div class="summary-card">
+    <div class="summary-label">本月結餘</div>
+    <div class="summary-balance" id="summary-balance">0</div>
+    <div class="summary-divider"></div>
+    <div class="summary-row">
+      <div class="summary-item">
+        <div class="summary-item-label">月支出</div>
+        <div class="summary-item-value exp" id="summary-expense">0</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-item-label">月收入</div>
+        <div class="summary-item-value inc" id="summary-income">0</div>
+      </div>
+    </div>
   </div>
-  <div class="summary-row">
-    <div class="summary-card"><div class="summary-label">收入</div><div class="summary-value" id="sum-income" style="color:var(--green)">0</div></div>
-    <div class="summary-card"><div class="summary-label">支出</div><div class="summary-value" id="sum-expense" style="color:var(--red)">0</div></div>
-    <div class="summary-card"><div class="summary-label">結餘</div><div class="summary-value" id="sum-balance">0</div></div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-all" onclick="setTab('all')">全部</button>
+    <button class="tab-btn" id="tab-expense" onclick="setTab('expense')">支出</button>
+    <button class="tab-btn" id="tab-income" onclick="setTab('income')">收入</button>
   </div>
+
   <div id="tx-container"></div>
 </div>
 
-<script>
-  const LIFF_ID='2009777350-FZreptEC';
-  const N8N='https://aldrichc.zeabur.app/webhook/f7dddde5-90d3-4422-a712-2d7724f89855';
-  let lineUserId=null,isDevMode=false;
-  let curYear=new Date().getFullYear(),curMonth=new Date().getMonth()+1;
+<div class="modal-overlay" id="month-modal" onclick="closeMonthPicker()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title">選擇月份</div>
+    <div class="modal-year">
+      <button class="year-btn" onclick="changeYear(-1)">‹</button>
+      <span class="year-label" id="picker-year">2026</span>
+      <button class="year-btn" onclick="changeYear(1)">›</button>
+    </div>
+    <div class="month-grid" id="month-grid"></div>
+  </div>
+</div>
 
-  async function init(){
-    try{
-      await liff.init({liffId:LIFF_ID});
-      if(!liff.isInClient()){
+<script>
+  const LIFF_ID = '2009777350-FZreptEC';
+  const N8N_WEBHOOK_LIST = 'https://aldrichc.zeabur.app/webhook/f7dddde5-90d3-4422-a712-2d7724f89855';
+  const LIFF_EDIT_URL = 'https://liff.line.me/2009777350-hL4TXA5D';
+
+  const CATEGORY_ICONS = {
+    '伙食費':'🍜','交通費':'🚗','居家':'🏠','娛樂':'🎮',
+    '購物':'🛍️','醫藥':'💊','生活':'✂️','薪資':'💼',
+    '獎金':'🎁','投資收益':'📊','其他':'📝'
+  };
+
+  let allTx=[], currentTab='all';
+  let currentYear=new Date().getFullYear(), currentMonth=new Date().getMonth()+1;
+  let pickerYear=currentYear, lineUserId=null, isDevMode=false;
+
+  async function init() {
+    try {
+      await liff.init({ liffId: LIFF_ID });
+      if (!liff.isInClient()) {
         isDevMode=true;
-      }else{
-        try{
-          const profile=await liff.getProfile();
-          lineUserId=profile.userId;
-        }catch(e){
+        document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>');
+      } else {
+        try {
+          const profile = await liff.getProfile();
+          lineUserId = profile.userId;
+        } catch(e) {
           document.getElementById('loading').innerHTML='<div style="color:var(--text3);padding:40px;text-align:center">無法取得用戶資訊</div>';
           return;
         }
       }
-    }catch(e){isDevMode=true;}
-    await loadData();
-    document.getElementById('loading').style.display='none';
-    document.getElementById('app').style.display='block';
-  }
-
-  async function loadData(){
-    updateMonthLabel();
-    const start=`${curYear}-${String(curMonth).padStart(2,'0')}-01`;
-    const end=new Date(curYear,curMonth,0).toISOString().split('T')[0];
-    let transactions=[];
-    if(isDevMode){
-      transactions=[
-        {id:'1',type:'expense',amount:150,category:'餐飲',item:'午餐',transaction_date:'2026-04-13',asset_id:'1'},
-        {id:'2',type:'income',amount:50000,category:'薪資',item:'四月薪水',transaction_date:'2026-04-10',asset_id:'2'},
-        {id:'3',type:'expense',amount:3000,category:'交通',item:'加油',transaction_date:'2026-04-10',asset_id:'1'},
-        {id:'4',type:'expense',amount:500,category:'購物',item:'超市',transaction_date:'2026-04-05',asset_id:'1'},
-      ];
-    }else{
-      const res=await fetch(N8N,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_user_id:lineUserId,start_date:start,end_date:end})});
-      const d=await res.json();
-      transactions=d.transactions||[];
+    } catch(e) {
+      isDevMode=true;
+      document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>');
     }
-    render(transactions);
-  }
-
-  function updateMonthLabel(){
-    document.getElementById('month-label').textContent=`${curYear} 年 ${curMonth} 月`;
-  }
-
-  async function changeMonth(delta){
-    curMonth+=delta;
-    if(curMonth>12){curMonth=1;curYear++;}
-    if(curMonth<1){curMonth=12;curYear--;}
-    document.getElementById('loading').style.display='flex';
-    document.getElementById('app').style.display='none';
     await loadData();
     document.getElementById('loading').style.display='none';
     document.getElementById('app').style.display='block';
   }
 
-  function render(transactions){
-    const income=transactions.filter(t=>t.type==='income').reduce((s,t)=>s+parseFloat(t.amount||0),0);
-    const expense=transactions.filter(t=>t.type==='expense'||t.type==='credit_expense').reduce((s,t)=>s+parseFloat(t.amount||0),0);
-    const balance=income-expense;
-    document.getElementById('sum-income').textContent=income.toLocaleString();
-    document.getElementById('sum-expense').textContent=expense.toLocaleString();
-    const balEl=document.getElementById('sum-balance');
-    balEl.textContent=balance.toLocaleString();
-    balEl.style.color=balance>=0?'var(--green)':'var(--red)';
+  async function loadData() {
+    document.getElementById('month-display').textContent=`${currentYear} 年 ${String(currentMonth).padStart(2,'0')} 月`;
+    if (isDevMode) {
+      allTx=[
+        {id:'1',type:'expense',amount:250,category:'伙食費',item:'午餐',transaction_date:'2026-04-08'},
+        {id:'2',type:'expense',amount:150,category:'交通費',item:'捷運',transaction_date:'2026-04-08'},
+        {id:'3',type:'income',amount:50000,category:'薪資',item:'薪資收入',transaction_date:'2026-04-05'},
+        {id:'4',type:'expense',amount:800,category:'購物',item:'衣服',transaction_date:'2026-04-03'},
+      ];
+    } else {
+      const s=`${currentYear}-${String(currentMonth).padStart(2,'0')}-01`;
+      const e=`${currentYear}-${String(currentMonth).padStart(2,'0')}-${new Date(currentYear,currentMonth,0).getDate()}`;
+      const res=await fetch(N8N_WEBHOOK_LIST,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_user_id:lineUserId,start_date:s,end_date:e})});
+      allTx=(await res.json()).transactions||[];
+    }
+    renderSummary(); renderList();
+  }
 
-    if(transactions.length===0){
-      document.getElementById('tx-container').innerHTML='<div class="empty">本月沒有記帳資料</div>';
+  function renderSummary() {
+    const exp=allTx.filter(t=>t.type==='expense'||t.type==='credit_expense').reduce((s,t)=>s+parseFloat(t.amount||0),0);
+    const inc=allTx.filter(t=>t.type==='income').reduce((s,t)=>s+parseFloat(t.amount||0),0);
+    const bal=inc-exp;
+    const balEl=document.getElementById('summary-balance');
+    balEl.textContent=bal.toLocaleString();
+    balEl.className='summary-balance '+(bal>=0?'positive':'negative');
+    document.getElementById('summary-expense').textContent=exp.toLocaleString();
+    document.getElementById('summary-income').textContent=inc.toLocaleString();
+  }
+
+  function setTab(tab) {
+    currentTab=tab;
+    ['all','expense','income'].forEach(t=>document.getElementById(`tab-${t}`).classList.toggle('active',t===tab));
+    renderList();
+  }
+
+  function renderList() {
+    let filtered=allTx.filter(t=>!t.is_deleted);
+    if(currentTab==='expense') filtered=filtered.filter(t=>t.type==='expense'||t.type==='credit_expense');
+    else if(currentTab==='income') filtered=filtered.filter(t=>t.type==='income');
+
+    const groups={};
+    filtered.forEach(t=>{ const d=t.transaction_date; if(!groups[d])groups[d]=[]; groups[d].push(t); });
+    const container=document.getElementById('tx-container');
+
+    if(!filtered.length){
+      container.innerHTML=`<div class="empty"><div class="empty-icon">📭</div><div class="empty-text">這個月還沒有記錄</div></div>`;
       return;
     }
 
-    // 依日期分組
-    const groups={};
-    transactions.sort((a,b)=>new Date(b.transaction_date)-new Date(a.transaction_date));
-    transactions.forEach(t=>{
-      const d=t.transaction_date.split('T')[0];
-      if(!groups[d])groups[d]=[];
-      groups[d].push(t);
-    });
-
-    const typeIcon={'expense':'💸','income':'💰','transfer':'🔄','credit_expense':'💳','stock_buy':'📈','stock_sell':'📉'};
-    const html=Object.keys(groups).sort((a,b)=>b.localeCompare(a)).map(date=>{
+    const weekDays=['日','一','二','三','四','五','六'];
+    container.innerHTML=Object.keys(groups).sort((a,b)=>b.localeCompare(a)).map(date=>{
+      const txs=groups[date];
+      const dayTotal=txs.reduce((s,t)=>{
+        if(t.type==='expense'||t.type==='credit_expense') return s-parseFloat(t.amount||0);
+        if(t.type==='income') return s+parseFloat(t.amount||0);
+        return s;
+      },0);
       const d=new Date(date);
-      const dateStr=`${d.getMonth()+1}/${d.getDate()}（${'日一二三四五六'[d.getDay()]}）`;
-      const items=groups[date].map(t=>{
-        const isExpense=t.type==='expense'||t.type==='credit_expense';
-        const isIncome=t.type==='income';
-        const color=isExpense?'var(--red)':isIncome?'var(--green)':'var(--text2)';
-        const prefix=isExpense?'-':isIncome?'+':'';
-        const icon=typeIcon[t.type]||'📝';
-        return `<div class="tx-item">
-          <div class="tx-icon">${icon}</div>
-          <div class="tx-info">
-            <div class="tx-name">${t.item||t.category||'未分類'}</div>
-            <div class="tx-cat">${t.category||''}${t.note?'・'+t.note:''}</div>
-          </div>
-          <div class="tx-right">
-            <div class="tx-amount" style="color:${color}">${prefix}${parseFloat(t.amount||0).toLocaleString()}</div>
-          </div>
-        </div>`;
-      }).join('');
-      return `<div class="section">
-        <div class="date-header">${dateStr}</div>
-        <div class="tx-list">${items}</div>
-      </div>`;
-    }).join('');
+      const dateLabel=`${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')} ${weekDays[d.getDay()]}`;
 
-    document.getElementById('tx-container').innerHTML=html;
+      return `
+        <div class="fade-in">
+          <div class="date-header">
+            <span class="date-label">${dateLabel}</span>
+            <span class="date-total" style="color:${dayTotal>=0?'var(--green)':'var(--red)'}">${dayTotal>=0?'+':''}${dayTotal.toLocaleString()}</span>
+          </div>
+          <div class="tx-list">
+            ${txs.map(tx=>{
+              const isNeg=tx.type==='expense'||tx.type==='credit_expense';
+              return `
+                <div class="tx-item" onclick="openEdit('${tx.id}')">
+                  <div class="tx-icon">${CATEGORY_ICONS[tx.category]||'📝'}</div>
+                  <div class="tx-info">
+                    <div class="tx-category">${tx.category||'其他'}</div>
+                    <div class="tx-item-name">${tx.item||'未命名'}</div>
+                  </div>
+                  <div class="tx-amount ${isNeg?'negative':'positive'}">${isNeg?'-':'+'}${parseFloat(tx.amount).toLocaleString()}</div>
+                  <div style="color:var(--paper2);font-size:14px;margin-left:4px">›</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }).join('');
   }
 
-  function closeLiff(){liff.closeWindow();}
-  init().catch(()=>{document.getElementById('loading').innerHTML='<div style="color:var(--text3);padding:40px;text-align:center">載入失敗</div>';});
+  function openEdit(txId) {
+    if(isDevMode){return;}
+    liff.openWindow({ url:`${LIFF_EDIT_URL}?tx_id=${txId}`, external:false });
+  }
+
+  function openMonthPicker(){pickerYear=currentYear;renderMonthGrid();document.getElementById('month-modal').classList.add('open');}
+  function closeMonthPicker(){document.getElementById('month-modal').classList.remove('open');}
+  function changeYear(d){pickerYear+=d;document.getElementById('picker-year').textContent=pickerYear;renderMonthGrid();}
+  function renderMonthGrid(){
+    document.getElementById('picker-year').textContent=pickerYear;
+    document.getElementById('month-grid').innerHTML=Array.from({length:12},(_,i)=>{
+      const m=i+1,sel=pickerYear===currentYear&&m===currentMonth;
+      return `<button class="month-btn ${sel?'selected':''}" onclick="selectMonth(${m})">${m} 月</button>`;
+    }).join('');
+  }
+  function selectMonth(m){currentYear=pickerYear;currentMonth=m;closeMonthPicker();loadData();}
+  function closeLiff(){if(isDevMode){return;}liff.closeWindow();}
+  init().catch(()=>{
+    document.getElementById('loading').innerHTML='<div style="color:var(--text3);padding:40px;text-align:center;font-family:Noto Serif TC,serif">載入失敗，請重試</div>';
+  });
 </script>
 </body>
 </html>
