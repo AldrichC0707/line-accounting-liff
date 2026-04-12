@@ -173,7 +173,7 @@
       const s=`${currentYear}-${String(currentMonth).padStart(2,'0')}-01`;
       const e=`${currentYear}-${String(currentMonth).padStart(2,'0')}-${new Date(currentYear,currentMonth,0).getDate()}`;
       const res=await fetch(N8N_WEBHOOK_LIST,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_user_id:lineUserId,start_date:s,end_date:e})});
-      allTx=(await res.json()).transactions||[];
+      allTx=((await res.json()).transactions||[]).filter(t=>t.id);
     }
     renderSummary(); renderList();
   }
