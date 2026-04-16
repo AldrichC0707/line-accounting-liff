@@ -248,36 +248,32 @@
   let lineUserId=null,isDevMode=false;
 
   async function init(){
+  try{
+    await liff.init({liffId:LIFF_ID});
     try{
-      await liff.init({liffId:LIFF_ID});
-      if(!liff.isInClient()){
-        isDevMode=true;
-        document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>');
-        renderProfile({displayName:'DEV 使用者',pictureUrl:null},[]);
-      }else{
-        try{
-          const profile=await liff.getProfile();
-          lineUserId=profile.userId;
-          let activeDates=[];
-          try{
-            const res=await fetch(API.profile,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_user_id:lineUserId})});
-            const d=await res.json();
-            activeDates=d.activeDates||[];
-          }catch(e){}
-          renderProfile(profile,activeDates);
-        }catch(e){
-          document.getElementById('loading').innerHTML='<div style="color:var(--text3);padding:40px;text-align:center">無法取得用戶資訊</div>';
-          return;
-        }
-      }
+      const profile=await liff.getProfile();
+      lineUserId=profile.userId;
+      if(!lineUserId) throw new Error('no userId');
+      let activeDates=[];
+      try{
+        const res=await fetch(API.profile,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({line_user_id:lineUserId})});
+        const d=await res.json();
+        activeDates=d.activeDates||[];
+      }catch(e){}
+      renderProfile(profile,activeDates);
     }catch(e){
       isDevMode=true;
       document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>');
-      renderProfile({displayName:'使用者',pictureUrl:null},[]);
+      renderProfile({displayName:'DEV 使用者',pictureUrl:null},[]);
     }
-    document.getElementById('loading').style.display='none';
-    document.getElementById('app').style.display='block';
+  }catch(e){
+    isDevMode=true;
+    document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>');
+    renderProfile({displayName:'使用者',pictureUrl:null},[]);
   }
+  document.getElementById('loading').style.display='none';
+  document.getElementById('app').style.display='block';
+}
 
   function renderProfile(profile,activeDates){
     document.getElementById('profile-name').textContent=profile.displayName||'使用者';
