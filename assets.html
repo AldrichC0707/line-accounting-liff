@@ -114,17 +114,13 @@
   async function init(){
   try{
     await liff.init({liffId:LIFF_ID});
-    if(!liff.isInClient()){
+    try{
+      const profile=await liff.getProfile();
+      lineUserId=profile.userId;
+      if(!lineUserId) throw new Error('no userId');
+    }catch(e){
       isDevMode=true;
       document.body.insertAdjacentHTML('beforeend','<div class="dev-badge">DEV</div>');
-    }else{
-      try{
-        const profile = await liff.getProfile();
-        lineUserId = profile.userId;
-      }catch(e){
-        document.getElementById('loading').innerHTML='<div style="color:var(--text3);padding:40px;text-align:center">無法取得用戶資訊</div>';
-        return;
-      }
     }
   }catch(e){
     isDevMode=true;
