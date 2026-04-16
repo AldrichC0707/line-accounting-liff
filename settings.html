@@ -44,9 +44,7 @@
     .menu-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;border:1.5px solid var(--paper2);}
     .menu-label{flex:1;font-size:14px;font-weight:500;color:var(--text);}
     .menu-arrow{font-size:14px;color:var(--paper2);}
-    .menu-value{font-size:13px;color:var(--text3);margin-right:4px;font-family:'Noto Serif TC',serif;}
 
-    /* 子頁面 */
     .subpage{display:none;position:fixed;inset:0;background:var(--cream);z-index:50;overflow-y:auto;padding-bottom:40px;}
     .subpage.open{display:block;}
 
@@ -54,21 +52,28 @@
     .asset-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
     .asset-name{font-size:15px;font-weight:700;color:var(--text);font-family:'Noto Serif TC',serif;}
     .asset-type-badge{font-size:11px;color:var(--text3);background:var(--paper);padding:3px 8px;border-radius:8px;border:1px solid var(--paper2);}
-    .input-row{display:flex;align-items:center;gap:8px;}
-    .input-label{font-size:12px;color:var(--text3);width:50px;flex-shrink:0;}
+    .input-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+    .input-row:last-of-type{margin-bottom:0;}
+    .input-label{font-size:12px;color:var(--text3);width:60px;flex-shrink:0;}
     .input-field{flex:1;border:1.5px solid var(--paper2);border-radius:10px;padding:8px 12px;font-size:14px;font-family:'Noto Sans TC',sans-serif;color:var(--text);background:white;outline:none;}
     .input-field:focus{border-color:var(--accent);}
+    .select-field{flex:1;border:1.5px solid var(--paper2);border-radius:10px;padding:8px 12px;font-size:14px;font-family:'Noto Sans TC',sans-serif;color:var(--text);background:white;outline:none;appearance:none;}
+    .select-field:focus{border-color:var(--accent);}
     .save-btn{margin-top:10px;width:100%;padding:10px;background:var(--accent);color:white;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Noto Sans TC',sans-serif;}
     .save-btn:active{opacity:0.8;}
     .save-btn.saved{background:var(--green);}
 
+    .add-card{background:white;margin:0 16px 8px;border-radius:var(--radius);border:2px dashed var(--paper2);padding:16px;box-shadow:var(--shadow);}
+    .add-card-title{font-size:14px;font-weight:700;color:var(--text3);font-family:'Noto Serif TC',serif;margin-bottom:14px;text-align:center;}
+    .add-btn{width:100%;padding:10px;background:var(--warm-dark);color:white;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Noto Sans TC',sans-serif;margin-top:10px;}
+    .add-btn:active{opacity:0.8;}
+
     .budget-item{background:white;margin:0 16px 8px;border-radius:var(--radius);border:1.5px solid var(--paper2);padding:16px;box-shadow:var(--shadow);}
-    .budget-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+    .budget-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
     .budget-name{font-size:15px;font-weight:700;color:var(--text);font-family:'Noto Serif TC',serif;}
-    .budget-type{font-size:11px;color:var(--text3);background:var(--paper);padding:3px 8px;border-radius:8px;border:1px solid var(--paper2);}
-    .budget-sub{font-size:12px;color:var(--text3);margin-bottom:12px;}
-    .bar-bg{height:6px;background:var(--paper2);border-radius:3px;overflow:hidden;margin-bottom:12px;}
-    .bar-fill{height:100%;border-radius:3px;background:var(--accent);}
+    .budget-type-badge{font-size:11px;color:var(--text3);background:var(--paper);padding:3px 8px;border-radius:8px;border:1px solid var(--paper2);}
+
+    .section-divider{height:1px;background:var(--paper2);margin:16px 16px 14px;}
 
     .version{text-align:center;color:var(--text3);font-size:12px;padding:20px;font-family:'Noto Serif TC',serif;}
     .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:16px;color:var(--text3);background:var(--cream);}
@@ -121,16 +126,16 @@
   <div class="section">
     <div class="section-title">─ 快速操作</div>
     <div class="menu-list">
-      <div class="menu-item" onclick="send('查帳戶餘額')">
-        <div class="menu-icon">💰</div><div class="menu-label">查帳戶餘額</div><div class="menu-arrow">›</div>
+      <div class="menu-item" onclick="openLiff('2009777350-BrcCzjVy')">
+        <div class="menu-icon">💰</div><div class="menu-label">資產總覽</div><div class="menu-arrow">›</div>
       </div>
-      <div class="menu-item" onclick="send('查持股')">
-        <div class="menu-icon">📊</div><div class="menu-label">持股狀態</div><div class="menu-arrow">›</div>
+      <div class="menu-item" onclick="openLiff('2009777350-UCqGP1Pa')">
+        <div class="menu-icon">📊</div><div class="menu-label">收支分析</div><div class="menu-arrow">›</div>
       </div>
-      <div class="menu-item" onclick="send('查本月支出')">
-        <div class="menu-icon">💸</div><div class="menu-label">本月支出分析</div><div class="menu-arrow">›</div>
+      <div class="menu-item" onclick="openLiff('2009777350-FZreptEC')">
+        <div class="menu-icon">📋</div><div class="menu-label">記帳明細</div><div class="menu-arrow">›</div>
       </div>
-      <div class="menu-item" onclick="send('使用說明')">
+      <div class="menu-item" onclick="openLiff('2009777350-dnzawjtp')">
         <div class="menu-icon">📖</div><div class="menu-label">使用說明</div><div class="menu-arrow">›</div>
       </div>
     </div>
@@ -148,6 +153,34 @@
   </div>
   <div style="height:14px"></div>
   <div id="accounts-list"></div>
+
+  <!-- 新增帳戶表單 -->
+  <div class="section-divider"></div>
+  <div class="add-card">
+    <div class="add-card-title">＋ 新增帳戶</div>
+    <div class="input-row">
+      <div class="input-label">帳戶名稱</div>
+      <input class="input-field" type="text" id="new-account-name" placeholder="例：玉山銀行">
+    </div>
+    <div class="input-row">
+      <div class="input-label">類型</div>
+      <select class="select-field" id="new-account-type" onchange="toggleCreditFields()">
+        <option value="cash">現金</option>
+        <option value="bank">銀行</option>
+        <option value="credit">信用卡</option>
+        <option value="stock_account">券商帳戶</option>
+      </select>
+    </div>
+    <div class="input-row" id="row-balance">
+      <div class="input-label">初始餘額</div>
+      <input class="input-field" type="number" id="new-account-balance" placeholder="0" value="0">
+    </div>
+    <div class="input-row" id="row-credit-limit" style="display:none">
+      <div class="input-label">信用額度</div>
+      <input class="input-field" type="number" id="new-account-credit-limit" placeholder="0" value="0">
+    </div>
+    <button class="add-btn" onclick="createAccount()">新增帳戶</button>
+  </div>
 </div>
 
 <!-- 預算子頁面 -->
@@ -159,6 +192,44 @@
   </div>
   <div style="height:14px"></div>
   <div id="budgets-list"></div>
+
+  <!-- 新增預算/計畫表單 -->
+  <div class="section-divider"></div>
+  <div class="add-card">
+    <div class="add-card-title">＋ 新增預算／計畫</div>
+    <div class="input-row">
+      <div class="input-label">名稱</div>
+      <input class="input-field" type="text" id="new-budget-name" placeholder="例：餐飲預算">
+    </div>
+    <div class="input-row">
+      <div class="input-label">類型</div>
+      <select class="select-field" id="new-budget-type" onchange="toggleBudgetFields()">
+        <option value="budget">預算（限制花費）</option>
+        <option value="savings">計畫（儲蓄目標）</option>
+      </select>
+    </div>
+    <div class="input-row">
+      <div class="input-label">分類</div>
+      <input class="input-field" type="text" id="new-budget-category" placeholder="例：伙食費">
+    </div>
+    <div class="input-row" id="row-limit-amount">
+      <div class="input-label">上限金額</div>
+      <input class="input-field" type="number" id="new-budget-limit" placeholder="0" value="0">
+    </div>
+    <div class="input-row" id="row-target-amount" style="display:none">
+      <div class="input-label">目標金額</div>
+      <input class="input-field" type="number" id="new-budget-target" placeholder="0" value="0">
+    </div>
+    <div class="input-row">
+      <div class="input-label">週期</div>
+      <select class="select-field" id="new-budget-period">
+        <option value="monthly">每月</option>
+        <option value="yearly">每年</option>
+        <option value="weekly">每週</option>
+      </select>
+    </div>
+    <button class="add-btn" onclick="createBudget()">新增</button>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -169,8 +240,10 @@
     profile:'https://aldrichc.zeabur.app/webhook/e76d52d2-16eb-4fd0-b97a-5e94b77b10c0',
     getAccounts:'https://aldrichc.zeabur.app/webhook/71c97966-744d-4928-8827-fd64319e228a',
     updateAccount:'https://aldrichc.zeabur.app/webhook/48678383-5e2a-4f66-abd8-2b2ca8f7ee52',
+    createAccount:'https://aldrichc.zeabur.app/webhook/liff-create-account',
     getBudgets:'https://aldrichc.zeabur.app/webhook/4260a4bc-1298-4dd4-b4a2-2fbd6020bb0b',
     updateBudget:'https://aldrichc.zeabur.app/webhook/4fc6708e-4d3f-4ae7-91ce-bd975b66b25a',
+    createBudget:'https://aldrichc.zeabur.app/webhook/liff-create-budget',
   };
   let lineUserId=null,isDevMode=false;
 
@@ -209,7 +282,6 @@
   function renderProfile(profile,activeDates){
     document.getElementById('profile-name').textContent=profile.displayName||'使用者';
     if(profile.pictureUrl) document.getElementById('avatar').innerHTML=`<img src="${profile.pictureUrl}">`;
-
     const weekDays=['日','一','二','三','四','五','六'];
     const days=[];
     for(let i=6;i>=0;i--){
@@ -251,18 +323,18 @@
           <div class="asset-type-badge">${typeLabel[a.type]||a.type}</div>
         </div>
         ${isCredit?`
-          <div class="input-row" style="margin-bottom:8px">
+          <div class="input-row">
             <div class="input-label">已使用</div>
-            <input class="input-field" type="number" id="used-${a.id}" value="${a.used_amount||0}" placeholder="已使用金額">
+            <input class="input-field" type="number" id="used-${a.id}" value="${a.used_amount||0}">
           </div>
           <div class="input-row">
             <div class="input-label">信用額度</div>
-            <input class="input-field" type="number" id="limit-${a.id}" value="${a.credit_limit||0}" placeholder="信用額度">
+            <input class="input-field" type="number" id="limit-${a.id}" value="${a.credit_limit||0}">
           </div>
         `:`
           <div class="input-row">
             <div class="input-label">餘額</div>
-            <input class="input-field" type="number" id="bal-${a.id}" value="${a.balance||0}" placeholder="帳戶餘額">
+            <input class="input-field" type="number" id="bal-${a.id}" value="${a.balance||0}">
           </div>
         `}
         <button class="save-btn" id="btn-${a.id}" onclick="saveAccount('${a.id}','${a.type}')">儲存</button>
@@ -272,8 +344,7 @@
 
   async function saveAccount(id,type){
     const btn=document.getElementById(`btn-${id}`);
-    btn.textContent='儲存中...';
-    btn.disabled=true;
+    btn.textContent='儲存中...';btn.disabled=true;
     const isCredit=type==='credit';
     const body={asset_id:id};
     if(isCredit){
@@ -283,17 +354,42 @@
       body.balance=parseFloat(document.getElementById(`bal-${id}`).value)||0;
     }
     try{
-      if(!isDevMode){
-        await fetch(API.updateAccount,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-      }
-      btn.textContent='✓ 已儲存';
-      btn.classList.add('saved');
+      if(!isDevMode) await fetch(API.updateAccount,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      btn.textContent='✓ 已儲存';btn.classList.add('saved');
       showToast('儲存成功！');
       setTimeout(()=>{btn.textContent='儲存';btn.classList.remove('saved');btn.disabled=false;},2000);
-    }catch(e){
-      btn.textContent='儲存失敗';
-      btn.disabled=false;
+    }catch(e){btn.textContent='儲存失敗';btn.disabled=false;}
+  }
+
+  function toggleCreditFields(){
+    const type=document.getElementById('new-account-type').value;
+    document.getElementById('row-balance').style.display=type==='credit'?'none':'flex';
+    document.getElementById('row-credit-limit').style.display=type==='credit'?'flex':'none';
+  }
+
+  async function createAccount(){
+    const name=document.getElementById('new-account-name').value.trim();
+    const type=document.getElementById('new-account-type').value;
+    if(!name){showToast('請輸入帳戶名稱');return;}
+    const btn=document.querySelector('.add-card .add-btn');
+    btn.textContent='新增中...';btn.disabled=true;
+    const body={line_user_id:lineUserId,name,type};
+    if(type==='credit'){
+      body.credit_limit=parseFloat(document.getElementById('new-account-credit-limit').value)||0;
+      body.used_amount=0;
+      body.balance=0;
+    }else{
+      body.balance=parseFloat(document.getElementById('new-account-balance').value)||0;
     }
+    try{
+      if(!isDevMode) await fetch(API.createAccount,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      showToast('帳戶新增成功！');
+      document.getElementById('new-account-name').value='';
+      document.getElementById('new-account-balance').value='0';
+      document.getElementById('new-account-credit-limit').value='0';
+      await openAccounts();
+    }catch(e){showToast('新增失敗，請重試');}
+    btn.textContent='新增帳戶';btn.disabled=false;
   }
 
   async function openBudgets(){
@@ -318,18 +414,18 @@
       return `<div class="budget-item">
         <div class="budget-header">
           <div class="budget-name">${isBudget?'🎯':'💰'} ${b.name}</div>
-          <div class="budget-type">${isBudget?'預算':'計畫'} · ${periodLabel[b.period]||b.period}</div>
+          <div class="budget-type-badge">${isBudget?'預算':'計畫'} · ${periodLabel[b.period]||b.period}</div>
         </div>
-        <div class="budget-sub">${b.category||''}${b.category?' · ':''}</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:10px">${b.category||''}</div>
         ${isBudget?`
           <div class="input-row">
             <div class="input-label">上限金額</div>
-            <input class="input-field" type="number" id="limit-${b.id}" value="${b.limit_amount||0}" placeholder="預算上限">
+            <input class="input-field" type="number" id="limit-${b.id}" value="${b.limit_amount||0}">
           </div>
         `:`
           <div class="input-row">
             <div class="input-label">目標金額</div>
-            <input class="input-field" type="number" id="target-${b.id}" value="${b.target_amount||0}" placeholder="目標金額">
+            <input class="input-field" type="number" id="target-${b.id}" value="${b.target_amount||0}">
           </div>
         `}
         <button class="save-btn" id="btn-${b.id}" onclick="saveBudget('${b.id}','${b.plan_type}')">儲存</button>
@@ -339,8 +435,7 @@
 
   async function saveBudget(id,type){
     const btn=document.getElementById(`btn-${id}`);
-    btn.textContent='儲存中...';
-    btn.disabled=true;
+    btn.textContent='儲存中...';btn.disabled=true;
     const isBudget=type==='budget';
     const body={budget_id:id};
     if(isBudget){
@@ -351,33 +446,51 @@
       body.limit_amount=0;
     }
     try{
-      if(!isDevMode){
-        await fetch(API.updateBudget,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-      }
-      btn.textContent='✓ 已儲存';
-      btn.classList.add('saved');
+      if(!isDevMode) await fetch(API.updateBudget,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      btn.textContent='✓ 已儲存';btn.classList.add('saved');
       showToast('儲存成功！');
       setTimeout(()=>{btn.textContent='儲存';btn.classList.remove('saved');btn.disabled=false;},2000);
-    }catch(e){
-      btn.textContent='儲存失敗';
-      btn.disabled=false;
-    }
+    }catch(e){btn.textContent='儲存失敗';btn.disabled=false;}
+  }
+
+  function toggleBudgetFields(){
+    const type=document.getElementById('new-budget-type').value;
+    document.getElementById('row-limit-amount').style.display=type==='budget'?'flex':'none';
+    document.getElementById('row-target-amount').style.display=type==='savings'?'flex':'none';
+  }
+
+  async function createBudget(){
+    const name=document.getElementById('new-budget-name').value.trim();
+    const type=document.getElementById('new-budget-type').value;
+    const category=document.getElementById('new-budget-category').value.trim();
+    const period=document.getElementById('new-budget-period').value;
+    if(!name){showToast('請輸入名稱');return;}
+    const btn=document.querySelector('#page-budgets .add-btn');
+    btn.textContent='新增中...';btn.disabled=true;
+    const body={
+      line_user_id:lineUserId,name,plan_type:type,category,period,
+      limit_amount:type==='budget'?parseFloat(document.getElementById('new-budget-limit').value)||0:0,
+      target_amount:type==='savings'?parseFloat(document.getElementById('new-budget-target').value)||0:0,
+    };
+    try{
+      if(!isDevMode) await fetch(API.createBudget,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      showToast('新增成功！');
+      document.getElementById('new-budget-name').value='';
+      document.getElementById('new-budget-category').value='';
+      document.getElementById('new-budget-limit').value='0';
+      document.getElementById('new-budget-target').value='0';
+      await openBudgets();
+    }catch(e){showToast('新增失敗，請重試');}
+    btn.textContent='新增';btn.disabled=false;
   }
 
   function closeSubpage(id){document.getElementById(id).classList.remove('open');}
-
+  function openLiff(liffId){liff.openWindow({url:`https://liff.line.me/${liffId}`,external:false});}
   function showToast(msg){
     const t=document.getElementById('toast');
-    t.textContent=msg;
-    t.classList.add('show');
+    t.textContent=msg;t.classList.add('show');
     setTimeout(()=>t.classList.remove('show'),2000);
   }
-
-  function send(text){
-    if(isDevMode){return;}
-    liff.sendMessages([{type:'text',text}]).then(()=>liff.closeWindow());
-  }
-
   function closeLiff(){if(isDevMode){return;}liff.closeWindow();}
   init().catch(()=>{document.getElementById('loading').innerHTML='<div style="color:var(--text3);padding:40px;text-align:center">載入失敗</div>';});
 </script>
